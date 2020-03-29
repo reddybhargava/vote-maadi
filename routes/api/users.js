@@ -15,10 +15,10 @@ const auth = require('../../middleware/auth');
 router.get('/', auth, async (req, res) => {
 	try {
 		const user = await User.findById(req.user.id).select('-password');
-		return res.json(user);
+		return res.send(user);
 	} catch (error) {
 		console.error(error.message);
-		return res.status(500).send('Server Error');
+		return res.status(500).send({ msg: 'Server Error!' });
 	}
 });
 
@@ -46,7 +46,7 @@ router.post('/signup', validator.body(bodySchema), async (req, res) => {
 		if (user) {
 			return res
 				.status(400)
-				.json({ errors: [{ msg: 'User already exists!' }] });
+				.send({ errors: [{ msg: 'User already exists!' }] });
 		}
 
 		user = new User({
@@ -74,11 +74,11 @@ router.post('/signup', validator.body(bodySchema), async (req, res) => {
 		// create a JWT token and send it in the response
 		jwt.sign(payload, jwtSecret, { expiresIn: 3600000 }, (err, token) => {
 			if (err) throw err;
-			return res.json({ token });
+			return res.send({ token });
 		});
 	} catch (error) {
 		console.error(error.message);
-		return res.status(500).send('Server Error!');
+		return res.status(500).send({ msg: 'Server Error!' });
 	}
 });
 
@@ -103,14 +103,14 @@ router.post('/signin', validator.body(bodySchema), async (req, res) => {
 		if (!user) {
 			return res
 				.status(400)
-				.json({ errors: [{ msg: 'Invalid credentials' }] });
+				.send({ errors: [{ msg: 'Invalid credentials' }] });
 		}
 
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (!isMatch) {
 			return res
 				.status(400)
-				.json({ errors: [{ msg: 'Invalid credentials' }] });
+				.send({ errors: [{ msg: 'Invalid credentials' }] });
 		}
 
 		const payload = {
@@ -124,11 +124,11 @@ router.post('/signin', validator.body(bodySchema), async (req, res) => {
 		// create a JWT token and send it in the response
 		jwt.sign(payload, jwtSecret, { expiresIn: 3600000 }, (err, token) => {
 			if (err) throw err;
-			return res.json({ token });
+			return res.send({ token });
 		});
 	} catch (error) {
 		console.error(error.message);
-		return res.status(500).send('Server Error!');
+		return res.status(500).send({ msg: 'Server Error!' });
 	}
 });
 
