@@ -1,4 +1,10 @@
 {
 	"mongoURI": "mongodb://127.0.0.1:27017/votemaadi",
-	"jwtSecret": "thesecrettoken"
+	"jwtSecret": "thesecrettoken",
+	"cloudinaryConfig": {
+		"cloud_name": "votemaadi",
+		"api_key": "256261985792227",
+		"api_secret": "C61q5DEBkbvlzmLDc2oYA6nH88E"
+	},
+	"CLOUDINARY_URL": "cloudinary://256261985792227:C61q5DEBkbvlzmLDc2oYA6nH88E@votemaadi"
 }
