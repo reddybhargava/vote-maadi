@@ -1,22 +1,35 @@
-const moongoose = require('mongoose');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const ElectionSchema = new moongoose.Schema({
+const ElectionSchema = new Schema({
 	name: {
 		type: String,
 		required: true
 	},
-	hostedBy: {
+	imageURL: {
 		type: String,
-		required: true
+		default: '' // TODO: Have to put in default image url here..
+	},
+	hostedBy: {
+		type: Schema.Types.ObjectId,
+		ref: 'users'
 	},
 	description: {
 		type: String,
 		required: true
 	},
-	date: {
+	startTime: {
 		type: Date,
 		required: true
+	},
+	endTime: {
+		type: Date,
+		required: true
+	},
+	createdAt: {
+		type: Date,
+		default: new Date()
 	}
 });
 
-module.exports = Election = moongoose.model('election', ElectionSchema);
+module.exports = Election = mongoose.model('elections', ElectionSchema);
