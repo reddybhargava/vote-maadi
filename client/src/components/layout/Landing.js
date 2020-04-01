@@ -7,10 +7,9 @@ const Landing = () => {
 			<div className="dark-overlay">
 				<div className="landing-inner">
 					<h1 className="x-large">Vote Maadi</h1>
-					<p className="lead">
-						Cast your vote from where ever you are because every
-						vote matters
-					</p>
+					<p className="lead">Cast your vote from wherever you are</p>
+					<p className="lead">Every vote matters</p>
+					<br />
 					<div className="buttons">
 						<Link to="/signup" className="btn btn-primary">
 							Sign Up
