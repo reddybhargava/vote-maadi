@@ -4,7 +4,6 @@ import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
-
 import './App.css';
 
 const App = () => (
