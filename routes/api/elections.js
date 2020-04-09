@@ -63,15 +63,15 @@ router.get('/', async (req, res) => {
 		if (status == 'all') {
 			// Do nothing, return list of all elections
 		} else if (status == 'completed') {
-			electionList = electionList.filter(election => {
+			electionList = electionList.filter((election) => {
 				return election.endTime < now;
 			});
 		} else if (status == 'ongoing') {
-			electionList = electionList.filter(election => {
+			electionList = electionList.filter((election) => {
 				return election.startTime < now && election.endTime > now;
 			});
 		} else if (status == 'future') {
-			electionList = electionList.filter(election => {
+			electionList = electionList.filter((election) => {
 				return election.startTime > now;
 			});
 		} else {
@@ -90,8 +90,8 @@ router.get('/', async (req, res) => {
 
 // @route	GET /api/elections/:electionId
 // @desc	Get details of an election
-// @access	Public
-router.get('/:electionId', async (req, res) => {
+// @access	Private
+router.get('/:electionId', auth, async (req, res) => {
 	try {
 		const electionId = req.params.electionId;
 		if (!electionId) {
@@ -101,6 +101,8 @@ router.get('/:electionId', async (req, res) => {
 		const election = await Election.findById(electionId);
 		if (!election) {
 			return res.status(404).send({ msg: 'Election not found' });
+		} else if (election.hostedBy.toString() !== req.user.id) {
+			return res.status(401).send({ msg: 'User not authorized' });
 		}
 
 		return res.send(election);
@@ -140,5 +142,89 @@ router.delete('/:electionId', auth, async (req, res) => {
 		return res.status(500).send({ msg: 'Server Error!' });
 	}
 });
+
+// @route	GET	/api/elections/:electionId/candidates
+// @desc	Get candidates of an election
+// @access	Private
+router.get('/:electionId/candidates', auth, async (req, res) => {
+	try {
+		const electionId = req.params.electionId;
+		if (!electionId) {
+			return res.status(400).send({ msg: 'Election ID required' });
+		}
+
+		const election = await Election.findById(electionId);
+		if (!election) {
+			return res.status(404).send({ msg: 'Election not found' });
+		} else if (election.hostedBy.toString() !== req.user.id) {
+			return res.status(401).send({ msg: 'User not authorized' });
+		}
+
+		// TODO: return candidates of an election
+	} catch (error) {
+		if (error.kind === 'ObjectId') {
+			return res.status(404).send({ msg: 'Election not found' });
+		}
+		console.log(error.message);
+		return res.status(500).send({ msg: 'Server Error!' });
+	}
+});
+
+// @route	POST /api/elections/:electionId/candidates
+// @desc	Add candidates to an election
+// @access	Private
+bodySchema = joi.object({
+	name: joi.string().required(),
+	promises: joi.string(),
+	gender: joi.string().required()
+});
+router.post(
+	'/:electionId/candidates',
+	[auth, validator.body(bodySchema)],
+	async (req, res) => {
+		try {
+			const electionId = req.params.electionId;
+			if (!electionId) {
+				return res.status(400).send({ msg: 'Election ID required' });
+			}
+
+			const election = await Election.findById(electionId);
+			if (!election) {
+				return res.status(404).send({ msg: 'Election not found' });
+			} else if (election.hostedBy.toString() !== req.user.id) {
+				return res.status(401).send({ msg: 'User not authorized' });
+			}
+
+			const { name, promises, gender } = req.body;
+			const candidates = {
+				name,
+				promises,
+				gender
+			};
+
+			// TODO: Check if the image is sent by the user and then make the upload API call
+			await cloudinary.uploader.upload(
+				'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTxG4fcxkoA5hMBcAc5ltcfh3bgR2HoQQ9Ygc7QrpU64EgdVzW6',
+				(err, res) => {
+					if (err) {
+						console.log(err);
+					} else {
+						candidates.imageURL = res.url;
+					}
+				}
+			);
+			election.candidates = candidates;
+			await election.save();
+
+			return res.status(200).send();
+		} catch (error) {
+			if (error.kind === 'ObjectId') {
+				return res.status(404).send({ msg: 'Election not found' });
+			}
+			console.log(error.message);
+			return res.status(500).send({ msg: 'Server Error!' });
+		}
+	}
+);
 
 module.exports = router;
