@@ -29,7 +29,31 @@ const ElectionSchema = new Schema({
 	createdAt: {
 		type: Date,
 		default: new Date()
-	}
+	},
+	candidates: [
+		{
+			name: {
+				type: String,
+				required: true
+			},
+			gender: {
+				type: String,
+				enum: ['Male', 'Female']
+			},
+			promises: {
+				type: String,
+				default: ''
+			},
+			votes: {
+				type: Number,
+				default: 0
+			},
+			imageURL: {
+				type: String,
+				default: '' // TODO: Have to put in default image url here..
+			}
+		}
+	]
 });
 
 module.exports = Election = mongoose.model('elections', ElectionSchema);
