@@ -11,10 +11,10 @@ const Landing = () => {
 					<p className="lead">Every vote matters</p>
 					<br />
 					<div className="buttons">
-						<Link to="/signup" className="btn btn-primary">
+						<Link to="/accounts/signup" className="btn btn-primary">
 							Sign Up
 						</Link>
-						<Link to="/signin" className="btn btn-light">
+						<Link to="/accounts/signin" className="btn btn-light">
 							Sign In
 						</Link>
 					</div>
