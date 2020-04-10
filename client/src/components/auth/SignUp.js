@@ -13,10 +13,9 @@ export class SignUp extends Component {
 	onChange = (e) => this.setState({ [e.target.name] : e.target.value });
 
 	checkUser = (e) => {
-		console.log(this.email);
-		axios.get('http://localhost:3000/api/users/check?email=' + this.email)
+		axios.get('http://localhost:3000/api/users/check?email=' + this.state.email)
 		.then(res => {
-			if(res.valid)
+			if(res.valid === true)
 			   alert("User already exists");
 		})
 	}	
@@ -25,9 +24,12 @@ export class SignUp extends Component {
 		e.preventDefault();
 		const { name, email, password, type } = this.state;
 
-		axios.post('http://localhost:3000/api/users/signup', { name, email, password, type});
-		console.log(email, password);
-};
+		axios.post('http://localhost:3000/api/users/signup', { name, email, password, type})
+			 .catch(  (error) => {
+				const response = error.response;
+				alert(response.data.errors);
+			 })
+	};
 
 	render() {
 		return (			
@@ -92,7 +94,7 @@ export class SignUp extends Component {
 					/>
 				</form>
 				<p className="my-1">
-					Already have an account? <Link to="/signin"> Sign In </Link>
+					Already have an account? <Link to="/accounts/signin"> Sign In </Link>
 				</p>
 		</Fragment>
 		)

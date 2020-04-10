@@ -8,19 +8,11 @@ export class SignIn extends Component {
 		password: ''
 	};
 
-	// componentDidMount() {
-	// 	axios.get(`https://jsonplaceholder.typicode.com/users`)
-	// 	  .then(res => {
-	// 		const persons = res.data;
-	// 		this.setState({ persons });
-	// 	  })
-	//   }
-
 	checkUser = (e) => {
-		//console.log(this.email);
-		axios.get('http://localhost:3000/api/users/check?email=' + this.email)
+		console.log('http://localhost:3000/api/users/check?email=' + this.state.email);
+		axios.get('http://localhost:3000/api/users/check?email=' + this.state.email)
 		.then(res => {
-			if(!res.valid)
+			if(res.valid === true)
 			   alert("Sign Up First");
 		})
 	}
@@ -34,14 +26,17 @@ export class SignIn extends Component {
 			e.preventDefault();
 			const { email, password } = this.state;
 
-			axios.post('/signin', { email, password });
-			console.log(email, password);
-	};
+			axios.post('http://localhost:3000/api/users/signin', { email, password })
+			.catch(  (error) => {
+				const response = error.response;
+				alert(response.data.errors);
+			  })
+
+		};
 
 	render() {
 		return (
 			<Fragment>
-			{/* <section className="container"> */}
 			<h1 className="large text-primary">Sign In</h1>
 			<p className="lead">Sign Into Your Account</p>
 			<form className="form" onSubmit={this.onSubmit}>
@@ -74,9 +69,8 @@ export class SignIn extends Component {
 				/>
 			</form>
 			<p className="my-1">
-				Don't have an account? <Link to="/signup"> Sign Up </Link>
+				Don't have an account? <Link to="/accounts/signup"> Sign Up </Link>
 			</p>
-			{/* </section> */}
 		</Fragment>
 		)
 	}
