@@ -8,7 +8,26 @@ export class SignIn extends Component {
 		password: ''
 	};
 
-	onChangeEmail = (e) => this.setState({email: e.target.value});
+	// componentDidMount() {
+	// 	axios.get(`https://jsonplaceholder.typicode.com/users`)
+	// 	  .then(res => {
+	// 		const persons = res.data;
+	// 		this.setState({ persons });
+	// 	  })
+	//   }
+
+	checkUser = (e) => {
+		//console.log(this.email);
+		axios.get('http://localhost:3000/api/users/check?email=' + this.email)
+		.then(res => {
+			if(!res.valid)
+			   alert("Sign Up First");
+		})
+	}
+
+	onChangeEmail = (e) => {
+		this.setState({email: e.target.value});
+	};
 	onChangePwd = (e) => this.setState({password: e.target.value});
 
 	onSubmit = (e) => {
@@ -33,6 +52,7 @@ export class SignIn extends Component {
 						name="email"
 						value={this.state.email}
 						onChange={this.onChangeEmail}
+						onBlur={this.checkUser}
 						required
 					/>
 				</div>
