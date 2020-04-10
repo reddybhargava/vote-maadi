@@ -46,9 +46,10 @@ img {
 
 /* Text Styles*/
 .x-large {
-	font-size: 4rem;
 	line-height: 1.2;
 	margin-bottom: 1rem;
+	font-size: 2.5em;
+	text-transform: uppercase;
 }
 
 .large {
@@ -308,7 +309,6 @@ button {
 	z-index: 1;
 	width: 100%;
 	top: 0;
-	border-bottom: solid 1px var(--primary-color);
 	opacity: 0.9;
 }
 
@@ -333,7 +333,10 @@ button {
 /* Landing Page */
 .landing {
 	position: relative;
-	background: url('./img/landing.jpg') no-repeat center center/cover;
+	background: url("./img/overlay.png"), url('./img/landing.jpg') no-repeat;
+	background-attachment: fixed;
+	background-position: center center;
+	background-size: cover;
 	height: 100vh;
 }
 
@@ -347,6 +350,7 @@ button {
 	align-items: center;
 	justify-content: center;
 	text-align: center;
+	padding: 14em 0 11em 0;
 }
 
 /* Profiles Page */

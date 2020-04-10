@@ -1,38 +1,38 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, Component } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-const SignIn = () => {
-	const [formData, setFormData] = useState({
+export class SignIn extends Component {
+	state = {
 		email: '',
 		password: ''
-	});
-
-	const { email, password } = formData;
-
-	const onChange = e =>
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.value
-		});
-
-	const onSubmit = e => {
-		e.preventDefault();
-		console.log(formData);
 	};
 
-	return (
-		<Fragment>
+	onChangeEmail = (e) => this.setState({email: e.target.value});
+	onChangePwd = (e) => this.setState({password: e.target.value});
+
+	onSubmit = (e) => {
+			e.preventDefault();
+			const { email, password } = this.state;
+
+			axios.post('/signin', { email, password });
+			console.log(email, password);
+	};
+
+	render() {
+		return (
+			<Fragment>
 			{/* <section className="container"> */}
 			<h1 className="large text-primary">Sign In</h1>
 			<p className="lead">Sign Into Your Account</p>
-			<form className="form" onSubmit={e => onSubmit(e)}>
+			<form className="form" onSubmit={this.onSubmit}>
 				<div className="form-group">
 					<input
 						type="email"
 						placeholder="Email Address"
 						name="email"
-						value={email}
-						onChange={e => onChange(e)}
+						value={this.state.email}
+						onChange={this.onChangeEmail}
 						required
 					/>
 				</div>
@@ -42,8 +42,8 @@ const SignIn = () => {
 						placeholder="Password"
 						name="password"
 						minLength="8"
-						value={password}
-						onChange={e => onChange(e)}
+						value={this.state.password}
+						onChange={this.onChangePwd}
 						required
 					/>
 				</div>
@@ -58,7 +58,8 @@ const SignIn = () => {
 			</p>
 			{/* </section> */}
 		</Fragment>
-	);
-};
+		)
+	}
+}
 
-export default SignIn;
+export default SignIn
