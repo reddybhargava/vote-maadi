@@ -18,7 +18,7 @@ router.get('/', auth, async (req, res) => {
 		return res.send(user);
 	} catch (error) {
 		console.error(error.message);
-		return res.status(500).send({ msg: 'Server Error!' });
+		return res.status(500).send({ errors: 'Server Error!' });
 	}
 });
 
@@ -40,7 +40,7 @@ router.post('/signup', validator.body(bodySchema), async (req, res) => {
 		if (user) {
 			return res
 				.status(400)
-				.send({ errors: [{ msg: 'User already exists!' }] });
+				.send({ errors: 'User already exists!' });
 		}
 
 		user = new User({
@@ -72,7 +72,7 @@ router.post('/signup', validator.body(bodySchema), async (req, res) => {
 		});
 	} catch (error) {
 		console.error(error.message);
-		return res.status(500).send({ msg: 'Server Error!' });
+		return res.status(500).send({ errors: 'Server Error!' });
 	}
 });
 
@@ -91,14 +91,14 @@ router.post('/signin', validator.body(bodySchema), async (req, res) => {
 		if (!user) {
 			return res
 				.status(400)
-				.send({ errors: [{ msg: 'Invalid credentials' }] });
+				.send({ errors: 'Invalid credentials'});
 		}
 
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (!isMatch) {
 			return res
 				.status(400)
-				.send({ errors: [{ msg: 'Invalid credentials' }] });
+				.send({ errors: 'Invalid credentials'});
 		}
 
 		const payload = {
@@ -116,7 +116,7 @@ router.post('/signin', validator.body(bodySchema), async (req, res) => {
 		});
 	} catch (error) {
 		console.error(error.message);
-		return res.status(500).send({ msg: 'Server Error!' });
+		return res.status(500).send({errors: 'Server Error!' });
 	}
 });
 
@@ -134,7 +134,7 @@ router.get('/check', async (req, res) => {
 		}
 	} catch (error) {
 		console.error(error.message);
-		return res.status(500).send({ msg: 'Server Error!' });
+		return res.status(500).send({ errors: 'Server Error!' });
 	}
 });
 
