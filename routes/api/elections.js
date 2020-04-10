@@ -160,7 +160,7 @@ router.get('/:electionId/candidates', auth, async (req, res) => {
 			return res.status(401).send({ msg: 'User not authorized' });
 		}
 
-		// TODO: return candidates of an election
+		return res.status(200).send(election.candidates);
 	} catch (error) {
 		if (error.kind === 'ObjectId') {
 			return res.status(404).send({ msg: 'Election not found' });
@@ -173,11 +173,13 @@ router.get('/:electionId/candidates', auth, async (req, res) => {
 // @route	POST /api/elections/:electionId/candidates
 // @desc	Add candidates to an election
 // @access	Private
-bodySchema = joi.object({
+let objectSchema = {
 	name: joi.string().required(),
 	promises: joi.string(),
-	gender: joi.string().required()
-});
+	gender: joi.string().required(),
+	age: joi.number().required()
+};
+bodySchema = joi.array().items(objectSchema).min(1).unique().required();
 router.post(
 	'/:electionId/candidates',
 	[auth, validator.body(bodySchema)],
@@ -195,25 +197,31 @@ router.post(
 				return res.status(401).send({ msg: 'User not authorized' });
 			}
 
-			const { name, promises, gender } = req.body;
-			const candidates = {
-				name,
-				promises,
-				gender
-			};
+			let candidateList = Array();
+			for (const candidate of req.body) {
+				const { name, promises, gender, age } = candidate;
+				const candidateObject = {
+					name,
+					promises,
+					gender,
+					age
+				};
 
-			// TODO: Check if the image is sent by the user and then make the upload API call
-			await cloudinary.uploader.upload(
-				'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTxG4fcxkoA5hMBcAc5ltcfh3bgR2HoQQ9Ygc7QrpU64EgdVzW6',
-				(err, res) => {
-					if (err) {
-						console.log(err);
-					} else {
-						candidates.imageURL = res.url;
+				// TODO: Check if the image is sent by the user and then make the upload API call
+				await cloudinary.uploader.upload(
+					'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTxG4fcxkoA5hMBcAc5ltcfh3bgR2HoQQ9Ygc7QrpU64EgdVzW6',
+					(err, res) => {
+						if (err) {
+							console.log(err);
+						} else {
+							candidateObject.imageURL = res.url;
+						}
 					}
-				}
-			);
-			election.candidates = candidates;
+				);
+				candidateList.push(candidateObject);
+			}
+
+			election.candidates = candidateList;
 			await election.save();
 
 			return res.status(200).send();
