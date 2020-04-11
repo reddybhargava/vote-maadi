@@ -32,6 +32,10 @@ const ElectionSchema = new Schema({
 	},
 	candidates: [
 		{
+			id: {
+				type: Schema.Types.ObjectId,
+				unique: true
+			},
 			name: {
 				type: String,
 				required: true
