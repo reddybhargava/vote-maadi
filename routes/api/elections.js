@@ -14,8 +14,7 @@ let bodySchema = joi.object({
 	name: joi.string().required(),
 	description: joi.string(),
 	startTime: joi.date().required(),
-	endTime: joi.date().required(),
-	hostedBy: joi.string().required()
+	endTime: joi.date().required()
 });
 router.post('/', [auth, validator.body(bodySchema)], async (req, res) => {
 	try {
