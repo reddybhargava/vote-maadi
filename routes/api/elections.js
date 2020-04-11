@@ -92,7 +92,7 @@ router.get('/', async (req, res) => {
 // @access	Private
 router.get('/:electionId', auth, async (req, res) => {
 	try {
-		const electionId = req.params.electionId;
+		const { electionId } = req.params;
 		if (!electionId) {
 			return res.status(400).send({ msg: 'Election ID required' });
 		}
@@ -119,7 +119,7 @@ router.get('/:electionId', auth, async (req, res) => {
 // @access	Private
 router.delete('/:electionId', auth, async (req, res) => {
 	try {
-		const electionId = req.params.electionId;
+		const { electionId } = req.params;
 		if (!electionId) {
 			return res.status(400).send({ msg: 'Election ID required' });
 		}
@@ -147,7 +147,7 @@ router.delete('/:electionId', auth, async (req, res) => {
 // @access	Private
 router.get('/:electionId/candidates', auth, async (req, res) => {
 	try {
-		const electionId = req.params.electionId;
+		const { electionId } = req.params;
 		if (!electionId) {
 			return res.status(400).send({ msg: 'Election ID required' });
 		}
@@ -184,7 +184,7 @@ router.post(
 	[auth, validator.body(bodySchema)],
 	async (req, res) => {
 		try {
-			const electionId = req.params.electionId;
+			const { electionId } = req.params;
 			if (!electionId) {
 				return res.status(400).send({ msg: 'Election ID required' });
 			}
@@ -224,6 +224,84 @@ router.post(
 			await election.save();
 
 			return res.status(200).send();
+		} catch (error) {
+			if (error.kind === 'ObjectId') {
+				return res.status(404).send({ msg: 'Election not found' });
+			}
+			console.log(error.message);
+			return res.status(500).send({ msg: 'Server Error!' });
+		}
+	}
+);
+
+// @route	GET /api/elections/:electionId/votes
+// @desc	Get the number of votes for candidates of an election
+// @access	Private
+router.get('/:electionId/votes', auth, async (req, res) => {
+	try {
+		const { electionId } = req.params;
+		if (!electionId) {
+			return res.status(400).send({ msg: 'Election ID required' });
+		}
+
+		const election = await Election.findById(electionId);
+		if (!election) {
+			return res.status(404).send({ msg: 'Election not found' });
+		} else if (election.hostedBy.toString() !== req.user.id) {
+			return res.status(401).send({ msg: 'User not authorized' });
+		}
+
+		const votes = election.candidates.map((candidate) => {
+			const { id, name, votes } = candidate;
+			return {
+				id,
+				name,
+				votes
+			};
+		});
+		return res.status(200).send(votes);
+	} catch (error) {
+		if (error.kind === 'ObjectId') {
+			return res.status(404).send({ msg: 'Election not found' });
+		}
+		console.log(error.message);
+		return res.status(500).send({ msg: 'Server Error!' });
+	}
+});
+
+// @route	POST /api/elections/:electionId/votes
+// @desc	Add votes for candidates of an election
+// @access	Private
+bodySchema = joi.object({
+	candidateID: joi.string().required()
+});
+router.post(
+	'/:electionId/votes',
+	[auth, validator.body(bodySchema)],
+	async (req, res) => {
+		try {
+			const { electionId } = req.params;
+			if (!electionId) {
+				return res.status(400).send({ msg: 'Election ID required' });
+			}
+
+			const election = await Election.findById(electionId);
+			if (!election) {
+				return res.status(404).send({ msg: 'Election not found' });
+			} else if (election.hostedBy.toString() !== req.user.id) {
+				return res.status(401).send({ msg: 'User not authorized' });
+			}
+
+			const { candidateID } = req.body;
+			election.candidates = election.candidates.map((candidate) => {
+				if (candidate.id === candidateID) {
+					candidate.votes += 1;
+				}
+				return candidate;
+			});
+
+			await election.save();
+			return res.sendStatus(200);
 		} catch (error) {
 			if (error.kind === 'ObjectId') {
 				return res.status(404).send({ msg: 'Election not found' });
