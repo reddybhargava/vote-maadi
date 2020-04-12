@@ -101,8 +101,6 @@ router.get('/:electionId', auth, async (req, res) => {
 		const election = await Election.findById(electionId);
 		if (!election) {
 			return res.status(404).send({ msg: 'Election not found' });
-		} else if (election.hostedBy.toString() !== req.user.id) {
-			return res.status(401).send({ msg: 'User not authorized' });
 		}
 
 		return res.send(election);
@@ -156,8 +154,6 @@ router.get('/:electionId/candidates', auth, async (req, res) => {
 		const election = await Election.findById(electionId);
 		if (!election) {
 			return res.status(404).send({ msg: 'Election not found' });
-		} else if (election.hostedBy.toString() !== req.user.id) {
-			return res.status(401).send({ msg: 'User not authorized' });
 		}
 
 		return res.status(200).send(election.candidates);
@@ -292,8 +288,6 @@ router.post(
 			const election = await Election.findById(electionId);
 			if (!election) {
 				return res.status(404).send({ msg: 'Election not found' });
-			} else if (election.hostedBy.toString() !== req.user.id) {
-				return res.status(401).send({ msg: 'User not authorized' });
 			}
 
 			const { candidateID } = req.body;
