@@ -19,7 +19,10 @@
 		"express-joi-validation": "^4.0.3",
 		"jsonwebtoken": "^8.5.1",
 		"mongoose": "^5.9.5",
-		"request": "^2.88.2"
+		"nodemailer": "^6.4.6",
+		"request": "^2.88.2",
+		"sentiment": "^5.0.2",
+		"simple-spam-filter": "0.0.2"
 	},
 	"devDependencies": {
 		"concurrently": "^5.1.0",

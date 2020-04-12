@@ -3,6 +3,7 @@ const router = express.Router();
 const joi = require('@hapi/joi');
 const validator = require('express-joi-validation').createValidator({});
 const cloudinary = require('cloudinary').v2;
+var Sentiment = require('sentiment');
 
 const Election = require('../../models/Election');
 const auth = require('../../middleware/auth');
@@ -100,8 +101,6 @@ router.get('/:electionId', auth, async (req, res) => {
 		const election = await Election.findById(electionId);
 		if (!election) {
 			return res.status(404).send({ msg: 'Election not found' });
-		} else if (election.hostedBy.toString() !== req.user.id) {
-			return res.status(401).send({ msg: 'User not authorized' });
 		}
 
 		return res.send(election);
@@ -155,8 +154,6 @@ router.get('/:electionId/candidates', auth, async (req, res) => {
 		const election = await Election.findById(electionId);
 		if (!election) {
 			return res.status(404).send({ msg: 'Election not found' });
-		} else if (election.hostedBy.toString() !== req.user.id) {
-			return res.status(401).send({ msg: 'User not authorized' });
 		}
 
 		return res.status(200).send(election.candidates);
@@ -196,14 +193,17 @@ router.post(
 				return res.status(401).send({ msg: 'User not authorized' });
 			}
 
+			const S = new Sentiment();
 			let candidateList = Array();
 			for (const candidate of req.body) {
 				const { name, promises, gender, age } = candidate;
+				const sentiment = S.analyze(promises);
 				const candidateObject = {
 					name,
 					promises,
 					gender,
-					age
+					age,
+					sentiment
 				};
 
 				// TODO: Check if the image is sent by the user and then make the upload API call
@@ -288,8 +288,6 @@ router.post(
 			const election = await Election.findById(electionId);
 			if (!election) {
 				return res.status(404).send({ msg: 'Election not found' });
-			} else if (election.hostedBy.toString() !== req.user.id) {
-				return res.status(401).send({ msg: 'User not authorized' });
 			}
 
 			const { candidateID } = req.body;
