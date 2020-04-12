@@ -59,6 +59,9 @@ const ElectionSchema = new Schema({
 			imageURL: {
 				type: String,
 				default: '' // TODO: Have to put in default image url here..
+			},
+			sentiment: {
+				type: Object
 			}
 		}
 	]
