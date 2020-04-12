@@ -1,56 +1,53 @@
 import React, { Fragment, Component } from "react";
 import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { setAlert } from "../../actions/alert";
 import axios from "axios";
 
-var redirect = false;
-
-export class SignIn extends Component {
+class SignIn extends Component {
   state = {
     email: "",
     password: "",
+    //loggedIn: false,
   };
 
-  renderRedirect = () => {
-    if (redirect === true) {
-      console.log("Should redirect");
-      return <Redirect to="/" />;
-    }
-  };
+	checkUser = () => {
+		console.log('http://localhost:3000/api/users/check?email=' + this.state.email);
+		axios.get('http://localhost:3000/api/users/check?email=' + this.state.email)
+		.then(res => {
+			if(res.valid === true)
+			   alert("Sign Up First");
+		})
+	}
 
-  checkUser = (e) => {
-    console.log(
-      "http://localhost:3000/api/users/check?email=" + this.state.email
-    );
-    axios
-      .get("http://localhost:3000/api/users/check?email=" + this.state.email)
-      .then((res) => {
-        if (res.valid === true) alert("Sign Up First");
-      });
-  };
+  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  onChangeEmail = (e) => {
-    this.setState({ email: e.target.value });
-  };
-  onChangePwd = (e) => this.setState({ password: e.target.value });
-
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = this.state;
 
-    axios
-      .post("http://localhost:3000/api/users/signin", { email, password })
-      .then(function (response) {
-        console.log(response);
-        redirect = true;
-        console.log(redirect);
-      })
-      .catch((error) => {
-        const response = error.response;
-        alert(response.data.errors);
+    try {
+      const res = await axios.post("http://localhost:3000/api/users/signin", {
+        email,
+        password,
       });
+      this.props.logIn();
+      this.props.setName(email);
+    } catch (error) {
+      alert(error.response.data.errors);
+    }
   };
 
+  check = () => {
+    console.log(this.props);
+    this.props.logIn();
+  }
+
   render() {
+    if (this.props.app.loggedIn === true) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <Fragment>
         <h1 className="large text-primary">Sign In</h1>
@@ -62,7 +59,7 @@ export class SignIn extends Component {
               placeholder="Email Address"
               name="email"
               value={this.state.email}
-              onChange={this.onChangeEmail}
+              onChange={this.onChange}
               onBlur={this.checkUser}
               required
             />
@@ -74,21 +71,17 @@ export class SignIn extends Component {
               name="password"
               minLength="8"
               value={this.state.password}
-              onChange={this.onChangePwd}
+              onChange={this.onChange}
               required
             />
           </div>
 
           <div>
-            {this.renderRedirect()}
-            <input
-              type="submit"
-              className="btn btn-primary"
-              value="Sign In"
-              onClick={this.onSubmit}
-            />
+            <button className="btn btn-primary" onClick={this.onSubmit}> Sign In</button>
           </div>
-        </form>
+
+        </form>       
+
         <p className="my-1">
           Don't have an account? <Link to="/accounts/signup"> Sign Up </Link>
         </p>
