@@ -34,6 +34,8 @@ export class SignUp extends Component {
       });
       this.props.logIn();
       this.props.setName(email);
+      this.props.setToken(res.response.data.token);
+
     } catch (error) {
       alert(error.response.data.errors);
     }

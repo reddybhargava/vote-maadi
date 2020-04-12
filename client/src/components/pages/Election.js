@@ -5,30 +5,19 @@ import axios from 'axios';
 export class SignUp extends Component {
 	state = {
 		name: '',
-		email: '',
-		password: '',
-		type: ''
-	};
-
-	success = {
-		redirect: false
+		description: '',
+		startTime: '',
+		endTime: '',
+		hostedBy: '',
 	};
 
 	onChange = (e) => this.setState({ [e.target.name] : e.target.value });
 
-	checkUser = (e) => {
-		axios.get('http://localhost:3000/api/users/check?email=' + this.state.email)
-		.then(res => {
-			if(res.valid === true)
-			   alert("User already exists");
-		})
-	}	
-
 	onSubmit = (e) => {
 		e.preventDefault();
-		const { name, email, password, type } = this.state;
+		const { name, description, startTime, endTime, hostedBy } = this.state;
 
-		axios.post('http://localhost:3000/api/users/signup', { name, email, password, type})
+		axios.post('http://localhost:3000/api/elections', { name, description, startTime, endTime, hostedBy })
 			.then(function (response) {
 				console.log(response);
 			})
@@ -41,8 +30,8 @@ export class SignUp extends Component {
 		return (			
 			<Fragment>
 
-				<h1 className="large text-primary">Sign Up</h1>
-				<p className="lead">Create Your Account</p>
+				<h1 className="large text-primary">Election Details</h1>
+				<p className="lead">Host your own Election</p>
 				<form className="form" onSubmit={this.onSubmit}>
 					<div className="form-group">
 						<input
@@ -56,22 +45,20 @@ export class SignUp extends Component {
 					</div>
 					<div className="form-group">
 						<input
-							type="email"
-							placeholder="Email Address"
-							name="email"
-							value={this.state.email}
+							type="description"
+							placeholder="Description"
+							name="description"
+							value={this.state.description}
 							onChange={this.onChange}
-							onBlur={this.checkUser}
 							required
 						/>
 					</div>
 					<div className="form-group">
 						<input
-							type="password"
-							placeholder="Password"
-							name="password"
-							minLength="8"
-							value={this.state.password}
+							type="time"
+							placeholder="Start Time"
+							name="startTime"
+							value={this.state.startTime}
 							onChange={this.onChange}
 							required
 						/>
@@ -79,29 +66,21 @@ export class SignUp extends Component {
 
 					<div className="form-group">
 						<input
-							type="radio"
-							name="type"
-							value="Admin"
+							type="time"
+							placeholder="End Time"
+							name="endTime"
+							value={this.state.endTime}
 							onChange={this.onChange}
+							required
 						/>
-						<span className="lead"> Admin </span>
-						<input
-							type="radio"
-							name="type"
-							value="Voter"
-							onChange={this.onChange}
-						/>
-						<span className="lead"> Voter </span>
 					</div>
+
 					<input
 						type="submit"
 						className="btn btn-primary"
-						value="Sign Up"
+						value="Next"
 					/>
 				</form>
-				<p className="my-1">
-					Already have an account? <Link to="/accounts/signin"> Sign In </Link>
-				</p>
 		</Fragment>
 		)
 	}

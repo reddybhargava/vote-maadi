@@ -14,7 +14,8 @@ class App extends Component {
 
 	state = {
 		loggedIn: false,
-		name: ''
+		name: '',
+		token: ''
 	}
 
 	logIn = () => {
@@ -23,6 +24,9 @@ class App extends Component {
 
 	setName = (user) => {
 		this.setState({name : user})
+	}
+	setToken = (token) => {
+		this.setState({token: token})
 	}
 
 	render() {		
@@ -33,8 +37,8 @@ class App extends Component {
 				<Route exact path="/" component={Landing} />
 				<section className="container">
 					<Switch>
-						<Route exact path="/accounts/signup" component={ () => <SignUp logIn={this.logIn} setName={this.setName} app={this.state}/>} />
-						<Route exact path="/accounts/signin" component={ () => <SignIn logIn={this.logIn} setName={this.setName} app={this.state}/>} />
+						<Route exact path="/accounts/signup" component={ () => <SignUp logIn={this.logIn} setName={this.setName} setToken={this.setToken} app={this.state}/>} />
+						<Route exact path="/accounts/signin" component={ () => <SignIn logIn={this.logIn} setName={this.setName} setToken={this.setToken} app={this.state}/>} />
 					</Switch>
 				</section>
 			</Fragment>

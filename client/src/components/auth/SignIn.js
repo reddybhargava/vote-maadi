@@ -31,8 +31,11 @@ class SignIn extends Component {
         email,
         password,
       });
+      console.log(res);
       this.props.logIn();
       this.props.setName(email);
+      this.props.setToken(res.data.token);
+      
     } catch (error) {
       alert(error.response.data.errors);
     }
