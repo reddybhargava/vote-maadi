@@ -4,11 +4,8 @@ import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
+import Election from './components/pages/Election';
 import './App.css';
-
-//Redux
-import { Provider } from 'react-redux';
-import store from './store'
 
 class App extends Component {
 
@@ -39,6 +36,7 @@ class App extends Component {
 					<Switch>
 						<Route exact path="/accounts/signup" component={ () => <SignUp logIn={this.logIn} setName={this.setName} setToken={this.setToken} app={this.state}/>} />
 						<Route exact path="/accounts/signin" component={ () => <SignIn logIn={this.logIn} setName={this.setName} setToken={this.setToken} app={this.state}/>} />
+						<Route exact path="/admin/elections" component={ () => <Election app={this.state} />} />
 					</Switch>
 				</section>
 			</Fragment>

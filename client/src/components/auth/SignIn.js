@@ -1,14 +1,11 @@
 import React, { Fragment, Component } from "react";
 import { Link, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import { setAlert } from "../../actions/alert";
 import axios from "axios";
 
 class SignIn extends Component {
   state = {
     email: "",
     password: "",
-    //loggedIn: false,
   };
 
 	checkUser = () => {
