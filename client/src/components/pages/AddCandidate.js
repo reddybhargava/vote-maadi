@@ -13,25 +13,37 @@ export class AddCandidate extends Component {
 
 	onChange = (e) => this.setState({ [e.target.name] : e.target.value });
 
-	main = { candidates : []};
-
-	addCandidate = () => {
-		// this.props.location.state.addCandidate(this.state);
-		//console.log(this.props.location.state.electionId);
-		console.log("Finish");		
-	};
-	
-  	addCandidate = () => {
-    console.log("Hey");
+  	addCandidate = async (e) => {
+		e.preventDefault();
+		console.log(this.props.location.state.token);
 		const newCandidate = {
-		  id: uuid.v4(),
+		//   id: uuid.v4(),
 		  name: this.state.name,
 		  promises: this.state.promises,
 		  gender: this.state.gender,
 		  age: this.state.age
 		}
-		console.log(newCandidate);
-		this.setState({ candidates : [...this.state.candidates, newCandidate]})
+		const config = {
+			headers: {
+			  "Content-Type": "application/json",
+			  "x-auth-token": this.props.location.state.token
+			}
+		  };
+
+		const url = "http://localhost:3000/api/elections/" +this.props.location.state.electionId + "/candidates";
+		console.log(url);
+
+		try {
+			const res = await axios.post(
+			  url,
+			  [newCandidate],
+			  config
+			);
+			console.log(res);
+		  } catch (error) {
+			const response = error.response;
+			console.log(response.data);
+		}
 	}	
 
     
@@ -86,7 +98,7 @@ export class AddCandidate extends Component {
 
                     <div className="form-group">
 						<input
-							type="textbox"
+							type="text"
 							placeholder="promises"
 							name="promises"
 							value={this.state.promises}
@@ -94,10 +106,17 @@ export class AddCandidate extends Component {
 							required
 						/>
 					</div>
+					<div className="form-group">
+						<input 
+							type="reset" 
+							value="Add Candidate"
+						/>
+						{/* </input> */}
+					</div>
+					
 				</form>
-
-				<div>
 						<button className="btn btn-primary" onClick={this.addCandidate}> Add Candidate</button>
+				<div>
                         <button className="btn btn-primary" onClick={this.onFinish}> Save and Finish</button>
 				</div>
 		</Fragment>

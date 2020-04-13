@@ -10,7 +10,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../../models/User');
 const Election = require('../../models/Election');
 const auth = require('../../middleware/auth');
-const sendMail = require('../../utils/mailer');
+// const sendMail = require('../../utils/mailer');
 
 // @route   POST /api/elections/
 // @desc    To create new election

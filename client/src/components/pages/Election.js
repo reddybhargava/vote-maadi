@@ -13,7 +13,6 @@ export class Election extends Component {
     startTime: "",
     endTime: "",
     electionId: "",
-    candidate : []
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -87,14 +86,6 @@ export class Election extends Component {
   // //   }
   // // };
 
-  onFinish = () => {
-    console.log("fuck you bithc");
-    //this.addCandidate(candidate);
-    // console.log(this.state);
-  }
-
-  
-
   render() {
     return (
       <Fragment>
@@ -153,12 +144,13 @@ export class Election extends Component {
 
           <div>
 
-			<button className="btn btn-primary" onClick={this.onSubmit}>
+			      <button className="btn btn-primary" onClick={this.onSubmit}>
                 Save Election
             </button>
 
             <Link to={{ pathname: "/admin/candidates", 
-                        state: { electionId: this.state.electionId }
+                        state: { electionId: this.state.electionId, 
+                                  token : this.props.app.token}
 
             }}>
 				      Add Candidate
