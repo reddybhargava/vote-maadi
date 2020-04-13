@@ -18,6 +18,9 @@ const UserSchema = new Schema({
 	type: {
 		type: String,
 		enum: ['Admin', 'Voter']
+	},
+	elections: {
+		type: Array
 	}
 });
 
