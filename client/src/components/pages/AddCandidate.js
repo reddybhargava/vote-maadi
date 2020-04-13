@@ -1,23 +1,42 @@
 import React, { Fragment, useState, Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import {v4 as uuid} from 'uuid';
 
 export class AddCandidate extends Component {
 	state = {
         name: '',
         promises: '',
         gender: '',
-        age: ''
+		age: ''
 	};
 
 	onChange = (e) => this.setState({ [e.target.name] : e.target.value });
 
-	onSubmit = async (e) => {
-        this.props.addCandidate.bind(this, this.state);
-    };
+	main = { candidates : []};
+
+	addCandidate = () => {
+		// this.props.location.state.addCandidate(this.state);
+		//console.log(this.props.location.state.electionId);
+		console.log("Finish");		
+	};
+	
+  	addCandidate = () => {
+    console.log("Hey");
+		const newCandidate = {
+		  id: uuid.v4(),
+		  name: this.state.name,
+		  promises: this.state.promises,
+		  gender: this.state.gender,
+		  age: this.state.age
+		}
+		console.log(newCandidate);
+		this.setState({ candidates : [...this.state.candidates, newCandidate]})
+	}	
+
     
-    onFinish = async (e) => {
-        this.props.finish.bind(this, this.state);
+    onFinish =  () => {
+		console.log("Hey");
 	};
 
 	render() {
@@ -25,7 +44,7 @@ export class AddCandidate extends Component {
 			<Fragment>
 				<h1 className="large text-primary">Candidate Details</h1>
 				<p className="lead">Fill in the candidate details</p>
-				<form className="form" onSubmit={this.onSubmit}>
+				<form className="form">
 					<div className="form-group">
 						<input
 							type="text"
@@ -75,20 +94,12 @@ export class AddCandidate extends Component {
 							required
 						/>
 					</div>
-
-					{/* <div className="form-group">
-						<input 
-							type="file" 
-							className="img" 
-							onChange={this.onChange}
-						/>
-					</div> */}
-
-					<div>
-						<button className="btn btn-primary" onClick={this.onSubmit}> Add Candidate</button>
-                        <button className="btn btn-primary" onClick={this.onFinish}> Save and Finish</button>
-					</div>
 				</form>
+
+				<div>
+						<button className="btn btn-primary" onClick={this.addCandidate}> Add Candidate</button>
+                        <button className="btn btn-primary" onClick={this.onFinish}> Save and Finish</button>
+				</div>
 		</Fragment>
 		)
 	}
