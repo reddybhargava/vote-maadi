@@ -3,10 +3,14 @@ const router = express.Router();
 const joi = require('@hapi/joi');
 const validator = require('express-joi-validation').createValidator({});
 const cloudinary = require('cloudinary').v2;
-var Sentiment = require('sentiment');
+const Sentiment = require('sentiment');
+const CSVtoJSON = require('convert-csv-to-json');
+const bcrypt = require('bcryptjs');
 
+const User = require('../../models/User');
 const Election = require('../../models/Election');
 const auth = require('../../middleware/auth');
+const sendMail = require('../../utils/mailer');
 
 // @route   POST /api/elections/
 // @desc    To create new election
@@ -220,7 +224,7 @@ router.post(
 				candidateList.push(candidateObject);
 			}
 
-			election.candidates = candidateList;
+			election.candidates = [...election.candidates, ...candidateList];
 			await election.save();
 
 			return res.status(200).send();

@@ -34,7 +34,8 @@ const ElectionSchema = new Schema({
 		{
 			id: {
 				type: Schema.Types.ObjectId,
-				unique: true
+				unique: true,
+				sparse: true
 			},
 			name: {
 				type: String,
