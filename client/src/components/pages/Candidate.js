@@ -1,19 +1,26 @@
-import React, { Fragment, useState, Component } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import React, { Component } from 'react'
+import {v4 as uuid} from 'uuid'
+import axios from 'axios'
+import AddCandidate from './AddCandidate'
 
 export class Candidate extends Component {
 	state = {
-        object :  {
-            name: '',
-            promises: '',
-            gender: '',
-            age: ''
-        },
-        candidates: [ ]
-	};
+		candidates : [],
+		redirect : false,
+		electionId : ''
+	}
 
-	onChange = (e) => this.setState({ [e.target.name] : e.target.value });
+	addCandidate = (candidate) => {
+		const newCandidate = {
+		  id: uuid.v4(),
+		  name: candidate.name,
+		  promises: candidate.promises,
+		  gender: candidate.gender,
+		  age: candidate.age
+		}
+		console.log(newCandidate);
+		this.setState({ candidates : [...this.state.candidates, newCandidate]})
+	}
 
 	onSubmit = async (e) => {
 		e.preventDefault();
@@ -40,70 +47,35 @@ export class Candidate extends Component {
 		  }
 	};
 
+	finish = (candidate) => {
+		this.addCandidate(candidate);
+	}
+
+	check() {
+		//if(this.props.location)
+		const id = this.props.location.state.electionId
+		console.log(id)
+		this.setState({ electionId : id })
+	}
+
 	render() {
-		return (			
-			<Fragment>
-				<h1 className="large text-primary">Election Details</h1>
-				<p className="lead">Host your own Election</p>
-				<form className="form" onSubmit={this.onSubmit}>
-					<div className="form-group">
-						<input
-							type="text"
-							placeholder="Name"
-							name="name"
-							value={this.state.name}
-							onChange={this.onChange}
-							required
-						/>
-					</div>
-					<div className="form-group">
-						<input
-							type="description"
-							placeholder="Description"
-							name="description"
-							value={this.state.description}
-							onChange={this.onChange}
-							required
-						/>
-					</div>
-					<div className="form-group">
-						<input
-							type="datetime-local"
-							placeholder="Start Time"
-							name="startTime"
-							value={this.state.startTime}
-							onChange={this.onChange}
-							required
-						/>
-					</div>
 
-					<div className="form-group">
-						<input
-							type="datetime-local"
-							placeholder="End Time"
-							name="endTime"
-							value={this.state.endTime}
-							onChange={this.onChange}
-							required
-						/>
-					</div>
+		{
+			if(this.state.electionId === '')
+			{
+				this.check();
+			}
+		}
 
-					{/* <div className="form-group">
-						<input 
-							type="file" 
-							className="img" 
-							onChange={this.onChange}
-						/>
-					</div> */}
-
-					<div>
-						<button className="btn btn-primary" onClick={this.onSubmit}> Next</button>
-					</div>
-				</form>
-		</Fragment>
+		return (
+			<div>
+				<AddCandidate addCandidate={ this.addCandidate } />				
+				{/* <button onClick={ this.check}> */}
+				Hello World!
+				{/* </button> */}
+			</div>
 		)
 	}
 }
 
-export default Candidate;
-
+export default Candidate
