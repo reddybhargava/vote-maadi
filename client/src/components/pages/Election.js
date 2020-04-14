@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import "./view_election.css";
 import { Redirect } from 'react-router-dom';
-import './election.css'
 import ViewCandidates from './ViewCandidates';
 import "./view_election.css";
 

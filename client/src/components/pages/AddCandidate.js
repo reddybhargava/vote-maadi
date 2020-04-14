@@ -33,7 +33,7 @@ export class AddCandidate extends Component {
 		  promises: this.state.promises,
 		  gender: this.state.gender,
 		  age: this.state.age,
-		  selectedFile : this.selectedFile,
+		  selectedFile : this.state.selectedFile,
 		  csv : this.state.csv
 		}
 		const config = {
