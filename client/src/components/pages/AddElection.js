@@ -1,9 +1,6 @@
-import React, { Fragment, useState, Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Fragment, Component } from "react";
 import axios from "axios";
-import AddCandidate from "./AddCandidate";
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import {v4 as uuid} from 'uuid'
+import { Redirect } from "react-router-dom";
 
 export class AddElection extends Component {
   state = {
@@ -11,10 +8,16 @@ export class AddElection extends Component {
     description: "",
     startTime: "",
     endTime: "",
+    selectedFile: null,
     electionId: "",
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+
+  onFileChange = (event) => {
+    // Update the state
+    this.setState({ selectedFile: event.target.files[0] });
+  };
 
   onSubmit = async (e) => {
     e.preventDefault();
@@ -24,10 +27,16 @@ export class AddElection extends Component {
         "x-auth-token": this.props.app.token,
       },
     };
-    const { name, description, startTime, endTime } = this.state;
-    const body = JSON.stringify({ name, description, startTime, endTime });
+
+    const body = {
+      name: this.state.name,
+      description: this.state.description,
+      startTime: this.state.startTime,
+      endTime: this.state.endTime,
+      selectedFile: this.state.selectedFile,
+    };
+
     console.log(body);
-    console.log(this.props.app.token);
 
     try {
       const res = await axios.post(
@@ -44,54 +53,45 @@ export class AddElection extends Component {
     }
   };
 
-  // addCandidate = () => {
-  //   console.log("Hey");
-	// 	// const newCandidate = {
-	// 	//   id: uuid.v4(),
-	// 	//   name: name,
-	// 	//   promises: promises,
-	// 	//   gender: gender,
-	// 	//   age: age
-	// 	// }
-	// 	// console.log(newCandidate);
-	// 	// this.setState({ candidates : [...this.state.candidates, newCandidate]})
-	// }
-
-  // // onFinish = async (e) => {
-  // //   e.preventDefault();
-  // //   const config = {
-  // //     headers: {
-  // //       "Content-Type": "application/json",
-  // //       "x-auth-token": this.props.app.token,
-  // //     },
-  // //   };
-  // //   const { name, description, startTime, endTime } = this.state;
-  // //   const body = JSON.stringify({ name, description, startTime, endTime });
-  // //   console.log(body);
-  // //   console.log(this.props.app.token);
-
-  // //   try {
-  // //     const res = await axios.post(
-  // //       "http://localhost:3000/api/elections",
-  // //       body,
-  // //       config
-  // //     );
-  // //     console.log(res);
-  // //     console.log(res.data._id);
-  // //     this.setState({ electionId: res.data._id });
-  // //   } catch (error) {
-  // //     const response = error.response;
-  // //     console.log(response.data);
-  // //   }
-  // // };
+  // File content to be displayed after 
+  // file upload is complete 
+  fileData = () => { 
+    
+    if (this.state.selectedFile) {        
+      return ( 
+        <div> 
+          <h2>File Details:</h2> 
+          <p>File Name: {this.state.selectedFile.name}</p> 
+          <p>File Type: {this.state.selectedFile.type}</p> 
+          <p> 
+            Last Modified:{" "} 
+            {this.state.selectedFile.lastModifiedDate.toDateString()} 
+          </p> 
+        </div> 
+      ); 
+    } else { 
+      return ( 
+        <div> 
+          <br /> 
+          <h4>Choose before Pressing the Upload button</h4> 
+        </div> 
+      ); 
+    } 
+  };
 
   render() {
     if (this.state.electionId !== "") {
-      return <Redirect to={
-              { pathname: "/admin/candidates", 
-                state: { electionId: this.state.electionId, 
-                token : this.props.app.token}
-              }}/>;
+      return (
+        <Redirect
+          to={{
+            pathname: "/admin/candidates",
+            state: {
+              electionId: this.state.electionId,
+              token: this.props.app.token,
+            },
+          }}
+        />
+      );
     }
     return (
       <Fragment>
@@ -139,30 +139,18 @@ export class AddElection extends Component {
               required
             />
           </div>
-
-          {/* <div className="form-group">
-						<input 
-							type="file" 
-							className="img" 
-							onChange={this.onChange}
-						/>
-					</div> */}
-
-          <div>
-
-			      <button className="btn btn-primary" onClick={this.onSubmit}>
-                Next 
-            </button>
-
-            {/* <Link to={{ pathname: "/admin/candidates", 
-                        state: { electionId: this.state.electionId, 
-                                  token : this.props.app.token}
-
-            }}>
-				      Add Candidate
-            </Link> */}
-          </div>
         </form>
+
+        <div className="form-group">
+          <input type="file" className="img" onChange={this.onFileChange} />
+        </div>
+
+        <div>
+          <button className="btn btn-primary" onClick={this.onSubmit}>
+            Next
+          </button>
+        </div>
+
       </Fragment>
     );
   }

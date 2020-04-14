@@ -1,27 +1,40 @@
 import React, { Fragment, useState, Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
-import {v4 as uuid} from 'uuid';
 
 export class AddCandidate extends Component {
 	state = {
         name: '',
         promises: '',
         gender: '',
-		age: ''
+		age: '',
+		selectedFile: null,
+		csv: null,
+		redirect: false,
 	};
 
 	onChange = (e) => this.setState({ [e.target.name] : e.target.value });
+
+	onFileChange = (event) => {
+		// Update the state
+		this.setState({ selectedFile: event.target.files[0] });
+	};
+
+	onCSVChange = (event) => {
+		// Update the state
+		this.setState({ csv: event.target.files[0] });
+	};
 
   	addCandidate = async (e) => {
 		e.preventDefault();
 		console.log(this.props.location.state.token);
 		const newCandidate = {
-		//   id: uuid.v4(),
 		  name: this.state.name,
 		  promises: this.state.promises,
 		  gender: this.state.gender,
-		  age: this.state.age
+		  age: this.state.age,
+		  selectedFile : this.selectedFile,
+		  csv : this.state.csv
 		}
 		const config = {
 			headers: {
@@ -47,11 +60,15 @@ export class AddCandidate extends Component {
 	}	
 
     
-    onFinish =  () => {
-		console.log("Hey");
+    onFinish =  (e) => {
+		this.addCandidate(e);
+		this.setState({redirect : true});
 	};
 
 	render() {
+		if (this.state.redirect === true) {
+			return <Redirect to="/" />;
+		}
 		return (			
 			<Fragment>
 				<h1 className="large text-primary">Candidate Details</h1>
@@ -112,12 +129,22 @@ export class AddCandidate extends Component {
 							value="Add Candidate"
 						/>
 						{/* </input> */}
-					</div>
-					
+					</div>					
 				</form>
-						<button className="btn btn-primary" onClick={this.addCandidate}> Add Candidate</button>
+
+				<div className="form-group">
+					Upload Candidate image : 
+            		<input type="file" className="img" onChange={this.onFileChange} />
+          		</div>
+
+				<div className="form-group">
+					Upload Voters list : 
+            	<input type="file" className="img" onChange={this.onCSVChange} />
+          		</div>
+
+				<button className="btn btn-primary" onClick={this.addCandidate}> Add Candidate</button>
 				<div>
-                        <button className="btn btn-primary" onClick={this.onFinish}> Save and Finish</button>
+                	<button className="btn btn-primary" onClick={this.onFinish}> Save and Finish</button>
 				</div>
 		</Fragment>
 		)
