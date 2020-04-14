@@ -6,7 +6,6 @@ import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 import AddElection from './components/pages/AddElection';
 import AddCandidate from './components/pages/AddCandidate';
-import './App.css';
 import OngoingElections from './components/pages/OngoingElections';
 import Election from './components/pages/Election';
 import {v4 as uuid} from 'uuid';
@@ -36,9 +35,11 @@ class App extends Component {
 		return (
 		<Router>
 			<Fragment>
-				<Navbar app={this.state} />
-				<Route exact path="/" component={Landing} />
-				<section className="container">
+				<Fragment>
+					<Navbar app={this.state} />
+					<Route exact path="/" component={Landing} />
+				</Fragment>
+				<section className="container" style={styles}>
 					<Switch>
 						<Route exact path="/view/ongoing" component={ () => <OngoingElections app={this.state} />} />
 						<Route exact path="/view/ongoing/election" component={Election} />
@@ -51,6 +52,16 @@ class App extends Component {
 			</Fragment>
 		</Router>
 	);}
+}
+
+const styles = {
+	marginTop: 0,
+	// paddingTop: 0,
+	// paddingBottom: 0,
+	// paddingLeft: 0,
+	// paddingRight: 0,
+	// marginLeft: 0,
+	// marginRight: 0
 }
 
 export default App;

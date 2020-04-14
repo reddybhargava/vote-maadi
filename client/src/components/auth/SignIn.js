@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
+import "../../form_templates/css/main.css"
 
 class SignIn extends Component {
   state = {
@@ -45,42 +46,57 @@ class SignIn extends Component {
 
     return (
       <Fragment>
-        <h1 className="large text-primary">Sign In</h1>
-        <p className="lead">Sign Into Your Account</p>
-        <form className="form">
-          <div className="form-group">
-            <input
-              type="email"
-              placeholder="Email Address"
-              name="email"
-              value={this.state.email}
-              onChange={this.onChange}
-              onBlur={this.checkUser}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              placeholder="Password"
-              name="password"
-              minLength="8"
-              value={this.state.password}
-              onChange={this.onChange}
-              required
-            />
-          </div>
+        <div className="container-contact100">
+          <div className="wrap-contact100">
+            <form className="contact100-form validate-form">
+              <span className="contact100-form-title">Sign In</span>
 
-          <div>
-            <button className="btn btn-primary" onClick={this.onSubmit}>
-              Sign In
-            </button>
-          </div>
-        </form>
+              <div className="wrap-input100 validate-input">
+                <label className="label-input100">
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  className="input100"
+                  type="email"
+                  placeholder="Enter your email..."
+                  name="email"
+                  value={this.state.email}
+                  onChange={this.onChange}
+                  onBlur={this.checkUser}
+                  required
+                />
+                <span className="focus-input100"></span>
+              </div>
 
-        <p className="my-1">
-          Don't have an account? <Link to="/accounts/signup"> Sign Up </Link>
-        </p>
+              <div className="wrap-input100 validate-input">
+                <label className="label-input100">
+                  Password
+                </label>
+                <input
+                  id="name"
+                  type="password"
+                  placeholder="Enter your password..."
+                  className="input100"
+                  name="password"
+                  minLength="8"
+                  value={this.state.password}
+                  onChange={this.onChange}
+                  required
+                />
+                <span className="focus-input100"></span>
+              </div>
+
+              <div className="container-contact100-form-btn">
+                <button className="contact100-form-btn" onClick={this.onSubmit}>
+                  Submit
+                </button>
+              </div>
+            </form>
+
+            <div className="contact100-more flex-col-c-m" > </div>
+          </div>
+        </div>
       </Fragment>
     );
   }
