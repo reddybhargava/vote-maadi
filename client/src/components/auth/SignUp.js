@@ -12,21 +12,22 @@ export class SignUp extends Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  checkUser = (e) => {
-	console.log(this.state.email);
-	axios.get('http://localhost:3000/api/users/check?email=' + this.state.email)
-	.then(res => {
-		if(res.valid === true)
-		   alert("User already exists");
-	})
-}
+  checkUser = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.get("/api/users/check?email=" + this.state.email);
+      if (res.data.valid === true) alert("Account Already Exists!");
+    } catch (error) {
+      alert(error.response.data.errors);
+    }
+  };
 
   onSubmit = async (e) => {
     e.preventDefault();
     const { name, email, password, type } = this.state;
 
     try {
-      const res = await axios.post("http://localhost:3000/api/users/signup", {
+      const res = await axios.post("/api/users/signup", {
         name,
         email,
         password,
@@ -35,7 +36,6 @@ export class SignUp extends Component {
       this.props.logIn();
       this.props.setName(email);
       this.props.setToken(res.response.data.token);
-
     } catch (error) {
       alert(error.response.data.errors);
     }
@@ -100,7 +100,9 @@ export class SignUp extends Component {
             <span className="lead"> Voter </span>
           </div>
           <div>
-            <button className="btn btn-primary" onClick={this.onSubmit}> Sign Up</button>
+            <button className="btn btn-primary" onClick={this.onSubmit}>
+              Sign Up
+            </button>
           </div>
         </form>
         <p className="my-1">

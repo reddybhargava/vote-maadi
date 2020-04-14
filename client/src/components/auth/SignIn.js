@@ -8,14 +8,15 @@ class SignIn extends Component {
     password: "",
   };
 
-	checkUser = () => {
-		console.log('http://localhost:3000/api/users/check?email=' + this.state.email);
-		axios.get('http://localhost:3000/api/users/check?email=' + this.state.email)
-		.then(res => {
-			if(res.valid === true)
-			   alert("Sign Up First");
-		})
-	}
+  checkUser = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.get("/api/users/check?email=" + this.state.email);
+      if (res.data.valid === false) alert("Sign Up First");
+    } catch (error) {
+      alert(error.response.data.errors);
+    }
+  };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
@@ -24,7 +25,7 @@ class SignIn extends Component {
     const { email, password } = this.state;
 
     try {
-      const res = await axios.post("http://localhost:3000/api/users/signin", {
+      const res = await axios.post("/api/users/signin", {
         email,
         password,
       });
@@ -32,16 +33,10 @@ class SignIn extends Component {
       this.props.logIn();
       this.props.setName(email);
       this.props.setToken(res.data.token);
-      
     } catch (error) {
       alert(error.response.data.errors);
     }
   };
-
-  check = () => {
-    console.log(this.props);
-    this.props.logIn();
-  }
 
   render() {
     if (this.props.app.loggedIn === true) {
@@ -77,10 +72,11 @@ class SignIn extends Component {
           </div>
 
           <div>
-            <button className="btn btn-primary" onClick={this.onSubmit}> Sign In</button>
+            <button className="btn btn-primary" onClick={this.onSubmit}>
+              Sign In
+            </button>
           </div>
-
-        </form>       
+        </form>
 
         <p className="my-1">
           Don't have an account? <Link to="/accounts/signup"> Sign Up </Link>
