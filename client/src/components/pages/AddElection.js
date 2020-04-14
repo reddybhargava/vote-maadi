@@ -40,7 +40,7 @@ export class AddElection extends Component {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/elections",
+        "/api/elections",
         body,
         config
       );

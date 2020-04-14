@@ -43,7 +43,7 @@ export class AddCandidate extends Component {
 			}
 		  };
 
-		const url = "http://localhost:3000/api/elections/" +this.props.location.state.electionId + "/candidates";
+		const url = "/api/elections/" +this.props.location.state.electionId + "/candidates";
 		console.log(url);
 
 		try {
