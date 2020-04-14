@@ -11,12 +11,7 @@ const Landing = () => {
 					<p className="lead">Every vote matters</p>
 					<br />
 					<div className="buttons">
-						<Link to="/accounts/signup" className="btn btn-primary">
-							Sign Up
-						</Link>
-						<Link to="/accounts/signin" className="btn btn-light">
-							Sign In
-						</Link>
+						<Link to="/view/ongoing" className="btn btn-light"> Vote Now! </Link>
 					</div>
 				</div>
 			</div>

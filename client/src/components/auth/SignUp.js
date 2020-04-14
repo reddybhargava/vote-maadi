@@ -1,110 +1,114 @@
-import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Fragment, useState, Component } from "react";
+import { Link, Redirect } from "react-router-dom";
+import axios from "axios";
 
-const SignUp = () => {
-	const [formData, setFormData] = useState({
-		name: '',
-		email: '',
-		password: '',
-		password2: '',
-		type: ''
-	});
+export class SignUp extends Component {
+  state = {
+    name: "",
+    email: "",
+    password: "",
+    type: "",
+  };
 
-	const { name, email, password, password2, type } = formData;
+  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-	const onChange = e =>
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.value
-		});
+  checkUser = (e) => {
+	console.log(this.state.email);
+	axios.get('http://localhost:3000/api/users/check?email=' + this.state.email)
+	.then(res => {
+		if(res.valid === true)
+		   alert("User already exists");
+	})
+}
 
-	const onSubmit = e => {
-		e.preventDefault();
-		if (password !== password2) {
-			console.log('Passwords do not match');
-		} else if (!type) {
-			console.log('Admin or Voter has to be selected');
-		} else {
-			console.log(formData);
-		}
-	};
+  onSubmit = async (e) => {
+    e.preventDefault();
+    const { name, email, password, type } = this.state;
 
-	return (
-		<Fragment>
-			{/* <section className="container"> */}
-			<h1 className="large text-primary">Sign Up</h1>
-			<p className="lead">Create Your Account</p>
-			<form className="form" onSubmit={e => onSubmit(e)}>
-				<div className="form-group">
-					<input
-						type="text"
-						placeholder="Name"
-						name="name"
-						value={name}
-						onChange={e => onChange(e)}
-						required
-					/>
-				</div>
-				<div className="form-group">
-					<input
-						type="email"
-						placeholder="Email Address"
-						name="email"
-						value={email}
-						onChange={e => onChange(e)}
-						required
-					/>
-				</div>
-				<div className="form-group">
-					<input
-						type="password"
-						placeholder="Password"
-						name="password"
-						minLength="8"
-						value={password}
-						onChange={e => onChange(e)}
-						required
-					/>
-				</div>
-				<div className="form-group">
-					<input
-						type="password"
-						placeholder="Confirm Password"
-						name="password2"
-						minLength="8"
-						value={password2}
-						onChange={e => onChange(e)}
-						required
-					/>
-				</div>
-				<div className="form-group">
-					<input
-						type="radio"
-						name="type"
-						value="Admin"
-						onChange={e => onChange(e)}
-					/>
-					<span className="lead"> Admin </span>
-					<input
-						type="radio"
-						name="type"
-						value="Voter"
-						onChange={e => onChange(e)}
-					/>
-					<span className="lead"> Voter </span>
-				</div>
-				<input
-					type="submit"
-					className="btn btn-primary"
-					value="Sign Up"
-				/>
-			</form>
-			<p className="my-1">
-				Already have an account? <Link to="/signin"> Sign In </Link>
-			</p>
-			{/* </section> */}
-		</Fragment>
-	);
-};
+    try {
+      const res = await axios.post("http://localhost:3000/api/users/signup", {
+        name,
+        email,
+        password,
+        type,
+      });
+      this.props.logIn();
+      this.props.setName(email);
+      this.props.setToken(res.response.data.token);
+
+    } catch (error) {
+      alert(error.response.data.errors);
+    }
+  };
+
+  render() {
+    if (this.props.app.loggedIn === true) {
+      return <Redirect to="/" />;
+    }
+    return (
+      <Fragment>
+        <h1 className="large text-primary">Sign Up</h1>
+        <p className="lead">Create Your Account</p>
+        <form className="form" onSubmit={this.onSubmit}>
+          <div className="form-group">
+            <input
+              type="text"
+              placeholder="Name"
+              name="name"
+              value={this.state.name}
+              onChange={this.onChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="email"
+              placeholder="Email Address"
+              name="email"
+              value={this.state.email}
+              onChange={this.onChange}
+              onBlur={this.checkUser}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              minLength="8"
+              value={this.state.password}
+              onChange={this.onChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              type="radio"
+              name="type"
+              value="Admin"
+              onChange={this.onChange}
+            />
+            <span className="lead"> Admin </span>
+            <input
+              type="radio"
+              name="type"
+              value="Voter"
+              onChange={this.onChange}
+            />
+            <span className="lead"> Voter </span>
+          </div>
+          <div>
+            <button className="btn btn-primary" onClick={this.onSubmit}> Sign Up</button>
+          </div>
+        </form>
+        <p className="my-1">
+          Already have an account? <Link to="/accounts/signin"> Sign In </Link>
+        </p>
+      </Fragment>
+    );
+  }
+}
 
 export default SignUp;
