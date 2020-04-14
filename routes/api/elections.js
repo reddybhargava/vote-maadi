@@ -4,13 +4,13 @@ const joi = require('@hapi/joi');
 const validator = require('express-joi-validation').createValidator({});
 const cloudinary = require('cloudinary').v2;
 const Sentiment = require('sentiment');
-const CSVtoJSON = require('convert-csv-to-json');
+// const CSVtoJSON = require('convert-csv-to-json');
 const bcrypt = require('bcryptjs');
 
 const User = require('../../models/User');
 const Election = require('../../models/Election');
 const auth = require('../../middleware/auth');
-const sendMail = require('../../utils/mailer');
+// const sendMail = require('../../utils/mailer');
 
 // @route   POST /api/elections/
 // @desc    To create new election
@@ -296,7 +296,7 @@ router.post(
 
 			const { candidateID } = req.body;
 			election.candidates = election.candidates.map((candidate) => {
-				if (candidate.id === candidateID) {
+				if (candidate._id.toString() === candidateID) {
 					candidate.votes += 1;
 				}
 				return candidate;
