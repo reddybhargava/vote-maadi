@@ -4,13 +4,13 @@ const joi = require('@hapi/joi');
 const validator = require('express-joi-validation').createValidator({});
 const cloudinary = require('cloudinary').v2;
 const Sentiment = require('sentiment');
-// const CSVtoJSON = require('convert-csv-to-json');
+const CSVtoJSON = require('convert-csv-to-json');
 const bcrypt = require('bcryptjs');
 
 const User = require('../../models/User');
 const Election = require('../../models/Election');
 const auth = require('../../middleware/auth');
-// const sendMail = require('../../utils/mailer');
+const sendMail = require('../../utils/mailer');
 
 // @route   POST /api/elections/
 // @desc    To create new election
@@ -313,5 +313,62 @@ router.post(
 		}
 	}
 );
+
+// @route	POST /api/elections/:electionId/voters
+// @desc	Add voters for an election
+// @access	Private
+bodySchema = joi.object({});
+router.post('/:electionId/voters', [auth], async (req, res) => {
+	try {
+		const { electionId } = req.params;
+		if (!electionId) {
+			return res.status(400).send({ msg: 'Election ID required' });
+		}
+
+		const election = await Election.findById(electionId);
+		if (!election) {
+			return res.status(404).send({ msg: 'Election not found' });
+		} else if (election.hostedBy.toString() !== req.user.id) {
+			return res.status(401).send({ msg: 'User not authorized' });
+		}
+
+		const csvFilePath =
+			'/home/reddy/reddy/college/sem6/web-tech/project/vote-maadi/utils/temp.csv';
+		const voters = CSVtoJSON.fieldDelimiter(',').getJsonFromCsv(
+			csvFilePath
+		);
+
+		const users = Array();
+		for (const voter of voters) {
+			let { name, email } = voter;
+			let tempPassword = Math.random().toString(36).substr(2, 8);
+			const salt = await bcrypt.genSalt(10);
+			const password = await bcrypt.hash(tempPassword, salt);
+
+			// TODO: Check if the user already exists and just add this election to their list
+			name = name.trim();
+			email = email.trim();
+			user = {
+				name,
+				email,
+				password,
+				type: 'Voter',
+				elections: [electionId]
+			};
+			users.push(user);
+
+			await sendMail(election.name, user.name, user.email, tempPassword);
+		}
+
+		await User.insertMany(users);
+		return res.sendStatus(200);
+	} catch (error) {
+		if (error.kind === 'ObjectId') {
+			return res.status(404).send({ msg: 'Election not found' });
+		}
+		console.log(error.message);
+		return res.status(500).send({ msg: 'Server Error!' });
+	}
+});
 
 module.exports = router;
