@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import ViewElection from './ViewElection'
 import "./view_election.css";
 import { Redirect } from 'react-router-dom';
+import './election.css'
+import ViewCandidates from './ViewCandidates';
+import "./view_election.css";
 
 
 export class Election extends Component {
@@ -49,20 +51,22 @@ export class Election extends Component {
             this.getCandidates();
         }
            
-        // const items = this.state.elections.map((item, key) =>
-        //     <ViewElection item={item} key={item._id} token={this.props.app.token} />
-        // );
+        const items = this.state.candidates.map((item, key) =>
+            <ViewCandidates item={item} key={item._id} token={this.props.location.state.token} electionId={this.props.location.state.electionId} />
+        );
 
         return (
             <div>
                 <h1>
                     Election
                 </h1>
+
                 <ul>
                     <div className="election">
-                        {/* {items} */}
+                        {items}
                     </div>
                 </ul>
+
             </div>
         )
     }
