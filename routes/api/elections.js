@@ -233,6 +233,8 @@ router.post('/:electionId/candidates', [auth], async (req, res) => {
 				})
 				.end(image.data);
 		} else {
+			candidateList.push(candidateObject);
+			election.candidates = [...election.candidates, ...candidateList];
 			await election.save();
 			return res.send(election.candidates);
 		}
