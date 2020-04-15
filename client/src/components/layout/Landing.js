@@ -17,7 +17,7 @@ export class Landing extends Component {
 					<p> Cast your Vote. <br /> Every vote matters</p>
 					<ul className="actions">
 						<Link to="/view/ongoing" className="btn btn-light">		
-						<li><a href="#" className="button special big"> Vote Now!</a> </li>
+						<li><div href="#" className="button special big"> Vote Now!</div> </li>
 						</Link>
 					</ul>
 				</section>		

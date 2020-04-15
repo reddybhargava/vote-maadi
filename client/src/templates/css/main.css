@@ -184,13 +184,13 @@
 		}
 
 	a {
-		text-decoration: underline;
-		color: #f32853;
+		text-decoration: none;
+		/* color: #f32853; */
 	}
 
-		a:hover {
-			text-decoration: none;
-		}
+	a:hover {
+		text-decoration: none;
+	}
 
 	strong, b {
 		color: #484848;
@@ -608,6 +608,7 @@
 
 	.icon {
 		text-decoration: none;
+		color: #f32853;
 		border-bottom: none;
 		position: relative;
 	}

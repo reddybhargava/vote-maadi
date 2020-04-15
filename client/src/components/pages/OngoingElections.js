@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import ViewElection from './ViewElection'
 import "./view_election.css";
+import "../../templates/css/main.css";
 
 
 export class OngoingElections extends Component {
@@ -26,18 +27,29 @@ export class OngoingElections extends Component {
         );
 
         return (
-            <div>
-                <h1>
+            <div style={styles}>
+                <h1 style={heading}>
                     Elections
                 </h1>
                 <ul>
-                    <div className="election">
+                    <div className="election" style={{paddingTop : '20px'}}>
                         {items}
                     </div>
                 </ul>
             </div>
         )
     }
+}
+
+const styles = {
+    backgroundColor: 'white',
+    paddingTop : '100px',
+    paddingLeft : '20px',
+}
+
+const heading = {
+    marginBottom : '10px',
+    fontSize: '50px'
 }
 
 export default OngoingElections;

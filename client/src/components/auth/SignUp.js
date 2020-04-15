@@ -103,6 +103,7 @@ export class SignUp extends Component {
                 <label className="label-input100">Type</label>
                 <input
                   type="radio"
+                  className="input100"
                   name="type"
                   value="Admin"
                   onChange={this.onChange}
@@ -111,6 +112,7 @@ export class SignUp extends Component {
                 <br />
                 <input
                   type="radio"
+                  className="input100"
                   name="type"
                   value="Voter"
                   onChange={this.onChange}

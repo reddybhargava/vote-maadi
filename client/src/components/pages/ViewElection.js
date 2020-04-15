@@ -14,20 +14,20 @@ class ViewElection extends Component {
     render() {
         return (
 
-        <div className='product'>
+        <div className='product' style={{backgroundColor: '#f4f4f4'}}>
             <Link to={
                     { pathname: "/view/ongoing/election", 
                       state: { electionId: this.props.item._id,
                                token: this.props.token
                     }, 
-                    }} >; 
+                    }} > 
                 <Fragment>
                     <img src={this.props.item.imageURL} />
                     <h2 className='header'>{this.props.item.name}</h2>
                     <br />
                     <p className='description'> {this.props.item.description} </p>
                     <br />
-                    <div className='btn'>VOTE!</div>                    
+                    <button className='button'>VOTE!</button>                    
                 </Fragment>      
 
             </Link>

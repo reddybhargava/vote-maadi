@@ -33,7 +33,7 @@ export class AddElection extends Component {
       description: this.state.description,
       startTime: this.state.startTime,
       endTime: this.state.endTime,
-      selectedFile: this.state.selectedFile,
+      // selectedFile: this.state.selectedFile,
     };
 
     console.log(body);

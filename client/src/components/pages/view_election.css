@@ -6,30 +6,30 @@
 }
 
 .election {
-  padding: 20px;
+  padding: 10px;
   padding-top: 100px;
   text-align: center;
 }
 .election .product {
   position: relative;
   overflow: hidden;
-  width: 380px;
+  width: 320px;
   height: 430px;
   display: inline-block;
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.45);
-  margin: 20px;
+  margin: 15px;
   padding: 15px;
 }
 .election .product img {
-  position: relative;
+  position: center;
   top: -15px;
   left: -15px;
-  right: -45px;
+  right: -15px;
   -webkit-transition: all .2s ease;
   transition: all .2s ease;
-  -webkit-clip-path: polygon(0 100%, 0 0, 100% 0, 100% 70%);
-          clip-path: polygon(0 100%, 0 0, 100% 0, 100% 70%);
+  -webkit-clip-path: polygon(0 100%, 0 0, 100% 0, 100% 90%);
+          clip-path: polygon(0 100%, 0 0, 100% 0, 100% 90%);
   border-top-right-radius: 2px;
   border-top-left-radius: 2px;
 }
@@ -42,7 +42,7 @@
 .election .product h2 {
   text-align: left;
   columns: #f4f4f4;;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: bold;
   margin-bottom: 4px;
 }
@@ -54,6 +54,7 @@
   /* overflow: hidden; */
 }
 
+/* 
 .election .product .btn {
   position: absolute;
   font-size: 11px;
@@ -93,4 +94,4 @@
   color: red;
   margin-left: 30px;
   transition: all .2s ease;
-}
+} */
