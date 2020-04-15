@@ -4,13 +4,13 @@ const joi = require('@hapi/joi');
 const validator = require('express-joi-validation').createValidator({});
 const cloudinary = require('cloudinary').v2;
 const Sentiment = require('sentiment');
-const CSVtoJSON = require('convert-csv-to-json');
 const bcrypt = require('bcryptjs');
+const csv = require('csvtojson');
 
 const User = require('../../models/User');
 const Election = require('../../models/Election');
 const auth = require('../../middleware/auth');
-// const sendMail = require('../../utils/mailer');
+const sendMail = require('../../utils/mailer');
 
 // @route   POST /api/elections/
 // @desc    To create new election
@@ -36,20 +36,24 @@ router.post('/', [auth, validator.body(bodySchema)], async (req, res) => {
 			hostedBy
 		});
 
-		// TODO: Check if the image is sent by the user and then make the upload API call
-		await cloudinary.uploader.upload(
-			'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTxG4fcxkoA5hMBcAc5ltcfh3bgR2HoQQ9Ygc7QrpU64EgdVzW6',
-			(err, res) => {
-				if (err) {
-					console.log(err);
-				} else {
-					election.imageURL = res.url;
-				}
-			}
-		);
-
-		await election.save();
-		return res.send(election);
+		if (req.files !== null) {
+			const image = req.files.image;
+			const imageURL = `elections/${election.id}`;
+			cloudinary.uploader
+				.upload_stream({ public_id: imageURL }, async (err, data) => {
+					if (err) {
+						console.log(err);
+					} else {
+						election.imageURL = data.url;
+						await election.save();
+						return res.send(election);
+					}
+				})
+				.end(image.data);
+		} else {
+			await election.save();
+			return res.send(election);
+		}
 	} catch (error) {
 		console.log(error.message);
 		return res.status(500).send({ msg: 'Server Error!' });
@@ -57,7 +61,7 @@ router.post('/', [auth, validator.body(bodySchema)], async (req, res) => {
 });
 
 // @route	GET /api/elections?status={ completed, ongoing, future, all }
-// @desc	List of all future elections
+// @desc	List of all { completed, ongoing, future} elections
 // @access	Public
 router.get('/', async (req, res) => {
 	try {
@@ -174,71 +178,72 @@ router.get('/:electionId/candidates', auth, async (req, res) => {
 // @route	POST /api/elections/:electionId/candidates
 // @desc	Add candidates to an election
 // @access	Private
-let objectSchema = {
+bodySchema = {
 	name: joi.string().required(),
 	promises: joi.string(),
 	gender: joi.string().required(),
 	age: joi.number().required(),
 	image: joi.any()
 };
-bodySchema = joi.array().items(objectSchema).min(1).unique().required();
-router.post(
-	'/:electionId/candidates',
-	[auth, validator.body(bodySchema)],
-	async (req, res) => {
-		try {
-			const { electionId } = req.params;
-			if (!electionId) {
-				return res.status(400).send({ msg: 'Election ID required' });
-			}
-
-			const election = await Election.findById(electionId);
-			if (!election) {
-				return res.status(404).send({ msg: 'Election not found' });
-			} else if (election.hostedBy.toString() !== req.user.id) {
-				return res.status(401).send({ msg: 'User not authorized' });
-			}
-
-			const S = new Sentiment();
-			let candidateList = Array();
-			for (const candidate of req.body) {
-				const { name, promises, gender, age } = candidate;
-				const sentiment = S.analyze(promises);
-				const candidateObject = {
-					name,
-					promises,
-					gender,
-					age,
-					sentiment
-				};
-
-				// TODO: Check if the image is sent by the user and then make the upload API call
-				await cloudinary.uploader.upload(
-					'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTxG4fcxkoA5hMBcAc5ltcfh3bgR2HoQQ9Ygc7QrpU64EgdVzW6',
-					(err, res) => {
-						if (err) {
-							console.log(err);
-						} else {
-							candidateObject.imageURL = res.url;
-						}
-					}
-				);
-				candidateList.push(candidateObject);
-			}
-
-			election.candidates = [...election.candidates, ...candidateList];
-			await election.save();
-
-			return res.status(200).send();
-		} catch (error) {
-			if (error.kind === 'ObjectId') {
-				return res.status(404).send({ msg: 'Election not found' });
-			}
-			console.log(error.message);
-			return res.status(500).send({ msg: 'Server Error!' });
+// bodySchema = joi.array().items(objectSchema).min(1).unique().required();
+router.post('/:electionId/candidates', [auth], async (req, res) => {
+	try {
+		const { electionId } = req.params;
+		if (!electionId) {
+			return res.status(400).send({ msg: 'Election ID required' });
 		}
+
+		const election = await Election.findById(electionId);
+		if (!election) {
+			return res.status(404).send({ msg: 'Election not found' });
+		} else if (election.hostedBy.toString() !== req.user.id) {
+			return res.status(401).send({ msg: 'User not authorized' });
+		}
+
+		let candidateList = Array();
+		const { name, promises, gender, age } = req.body;
+
+		const S = new Sentiment();
+		const sentiment = S.analyze(promises);
+		const candidateObject = {
+			name,
+			promises,
+			gender,
+			age,
+			sentiment
+		};
+
+		if (req.files !== null) {
+			const image = req.files.image;
+			const imageFolder = 'candidates';
+			cloudinary.uploader
+				.upload_stream({ folder: imageFolder }, async (err, data) => {
+					if (err) {
+						console.log(err);
+					} else {
+						candidateObject.imageURL = data.url;
+						candidateList.push(candidateObject);
+						election.candidates = [
+							...election.candidates,
+							...candidateList
+						];
+						await election.save();
+						return res.send(election.candidates);
+					}
+				})
+				.end(image.data);
+		} else {
+			await election.save();
+			return res.send(election.candidates);
+		}
+	} catch (error) {
+		if (error.kind === 'ObjectId') {
+			return res.status(404).send({ msg: 'Election not found' });
+		}
+		console.log(error.message);
+		return res.status(500).send({ msg: 'Server Error!' });
 	}
-);
+});
 
 // @route	GET /api/elections/:electionId/votes
 // @desc	Get the number of votes for candidates of an election
@@ -319,69 +324,55 @@ router.post(
 // @route	POST /api/elections/:electionId/voters
 // @desc	Add voters for an election
 // @access	Private
-bodySchema = joi.object({
-	voterList: joi.any()
-});
-router.post(
-	'/:electionId/voters',
-	[auth, validator.body(bodySchema)],
-	async (req, res) => {
-		try {
-			const { electionId } = req.params;
-			if (!electionId) {
-				return res.status(400).send({ msg: 'Election ID required' });
-			}
-
-			const election = await Election.findById(electionId);
-			if (!election) {
-				return res.status(404).send({ msg: 'Election not found' });
-			} else if (election.hostedBy.toString() !== req.user.id) {
-				return res.status(401).send({ msg: 'User not authorized' });
-			}
-
-			const csvFilePath =
-				'/home/reddy/reddy/college/sem6/web-tech/project/vote-maadi/utils/temp.csv';
-			const voters = CSVtoJSON.fieldDelimiter(',').getJsonFromCsv(
-				csvFilePath
-			);
-
-			const users = Array();
-			for (const voter of voters) {
-				let { name, email } = voter;
-				let tempPassword = Math.random().toString(36).substr(2, 8);
-				const salt = await bcrypt.genSalt(10);
-				const password = await bcrypt.hash(tempPassword, salt);
-
-				// TODO: Check if the user already exists and just add this election to their list
-				name = name.trim();
-				email = email.trim();
-				user = {
-					name,
-					email,
-					password,
-					type: 'Voter',
-					elections: [electionId]
-				};
-				users.push(user);
-
-				await sendMail(
-					election.name,
-					user.name,
-					user.email,
-					tempPassword
-				);
-			}
-
-			await User.insertMany(users);
-			return res.sendStatus(200);
-		} catch (error) {
-			if (error.kind === 'ObjectId') {
-				return res.status(404).send({ msg: 'Election not found' });
-			}
-			console.log(error.message);
-			return res.status(500).send({ msg: 'Server Error!' });
+router.post('/:electionId/voters', auth, async (req, res) => {
+	try {
+		const { electionId } = req.params;
+		if (!electionId) {
+			return res.status(400).send({ msg: 'Election ID required' });
 		}
+
+		const election = await Election.findById(electionId);
+		if (!election) {
+			return res.status(404).send({ msg: 'Election not found' });
+		} else if (election.hostedBy.toString() !== req.user.id) {
+			return res.status(401).send({ msg: 'User not authorized' });
+		}
+
+		const voterList = req.files.voterList;
+		const voterListString = voterList.data.toString();
+		const voters = await csv().fromString(voterListString);
+
+		const users = Array();
+		for (const voter of voters) {
+			let { name, email } = voter;
+			let tempPassword = Math.random().toString(36).substr(2, 8);
+			const salt = await bcrypt.genSalt(10);
+			const password = await bcrypt.hash(tempPassword, salt);
+
+			// TODO: Check if the user already exists and just add this election to their list
+			name = name.trim();
+			email = email.trim();
+			user = {
+				name,
+				email,
+				password,
+				type: 'Voter',
+				elections: [electionId]
+			};
+			users.push(user);
+
+			await sendMail(election.name, user.name, user.email, tempPassword);
+		}
+
+		await User.insertMany(users);
+		return res.sendStatus(200);
+	} catch (error) {
+		if (error.kind === 'ObjectId') {
+			return res.status(404).send({ msg: 'Election not found' });
+		}
+		console.log(error.message);
+		return res.status(500).send({ msg: 'Server Error!' });
 	}
-);
+});
 
 module.exports = router;
