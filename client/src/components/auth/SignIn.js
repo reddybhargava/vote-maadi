@@ -46,11 +46,9 @@ class SignIn extends Component {
 
     return (
       <Fragment>
-        <div className="container-contact100">
-          <div className="wrap-contact100">
-            <form className="contact100-form validate-form">
-              <span className="contact100-form-title">Sign In</span>
-
+        <div className="container-contact100" style={styles}>
+          <div className="wrap-contact100" style={styles2}>
+              <span className="contact100-form-title" style={{paddingTop : 10}}>Sign In</span>
               <div className="wrap-input100 validate-input">
                 <label className="label-input100">
                   Email Address
@@ -92,14 +90,27 @@ class SignIn extends Component {
                   Submit
                 </button>
               </div>
-            </form>
-
-            <div className="contact100-more flex-col-c-m" > </div>
           </div>
         </div>
       </Fragment>
     );
   }
+}
+
+const styles = {
+  backgroundColor : '#f4f4f4',
+  paddingLeft : 400,
+  paddingRight : 400,
+  width : '100%'
+}
+
+const styles2 = {
+  backgroundColor : 'white',
+  paddingLeft : 20,
+  paddingRight : 20,
+  paddingBottom : 20,
+  paddingTop : 30,
+  width : '100%'
 }
 
 export default SignIn;

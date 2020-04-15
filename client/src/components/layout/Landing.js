@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import '../../templates/css/main.css'
+import Navbar from './Navbar'
 
 
 export class Landing extends Component {
     render() {
         return (
 			<div className="landing">
+
+				<Navbar app={this.props.app} />
+
 
 				<section id="banner">
 					<h2>Vote Maadi</h2>

@@ -36,8 +36,7 @@ class App extends Component {
 		<Router>
 			<Fragment>
 				<Fragment>
-					<Navbar app={this.state} />
-					<Route exact path="/" component={Landing} />
+					<Route exact path="/" component={ () => <Landing app={this.state} />}/>
 				</Fragment>
 				<section className="container" style={styles}>
 					<Switch>
@@ -60,8 +59,9 @@ const styles = {
 	// paddingBottom: 0,
 	// paddingLeft: 0,
 	// paddingRight: 0,
-	// marginLeft: 0,
-	// marginRight: 0
+	marginLeft: 0,
+	marginRight: 0,
+	width: '100%'
 }
 
 export default App;
