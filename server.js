@@ -3,6 +3,7 @@ const connectDB = require('./config/db');
 const cloudinary = require('cloudinary').v2;
 const config = require('config');
 const cloudinaryConfig = config.get('cloudinaryConfig');
+const fileUpload = require('express-fileupload');
 
 const app = express();
 
@@ -14,6 +15,7 @@ cloudinary.config(cloudinaryConfig);
 
 // Init Middleware
 app.use(express.json({ extended: false }));
+app.use(fileUpload());
 
 // Define routes
 app.use('/api/users', require('./routes/api/users'));
