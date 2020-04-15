@@ -344,7 +344,7 @@ router.post('/:electionId/voters', auth, async (req, res) => {
 
 		const users = Array();
 		for (const voter of voters) {
-			let { name, email } = voter;
+			let { name, email, gender, age } = voter;
 			let tempPassword = Math.random().toString(36).substr(2, 8);
 			const salt = await bcrypt.genSalt(10);
 			const password = await bcrypt.hash(tempPassword, salt);
@@ -356,6 +356,8 @@ router.post('/:electionId/voters', auth, async (req, res) => {
 				name,
 				email,
 				password,
+				gender,
+				age,
 				type: 'Voter',
 				elections: [electionId]
 			};
