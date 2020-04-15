@@ -3,63 +3,74 @@ import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 
 export class AddCandidate extends Component {
-  state = {
-    name: "",
-    promises: "",
-    gender: "",
-    age: "",
-    selectedFile: null,
-    csv: null,
-    redirect: false,
-  };
+	state = {
+		name: '',
+		promises: '',
+		gender: '',
+		age: '',
+		selectedFile: null,
+		redirect: false
+	};
 
-  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+	onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  onFileChange = (event) => {
-    // Update the state
-    this.setState({ selectedFile: event.target.files[0] });
-  };
+	onFileChange = (event) => {
+		// Update the state
+		this.setState({ selectedFile: event.target.files[0] });
+	};
 
-  onCSVChange = (event) => {
-    // Update the state
-    this.setState({ csv: event.target.files[0] });
-  };
 
-  addCandidate = async (e) => {
-    e.preventDefault();
-    console.log(this.props.location.state.token);
-    const newCandidate = {
-      name: this.state.name,
-      promises: this.state.promises,
-      gender: this.state.gender,
-      age: this.state.age,
-    //   selectedFile: this.state.selectedFile,
-    //   csv: this.state.csv,
-    };
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        "x-auth-token": this.props.location.state.token,
-      },
-    };
+	clearAllFields = () => {
+		this.setState({
+			name: '',
+			promises: '',
+			gender: '',
+			age: '',
+			selectedFile: null
+		});
+	};
 
-    const url =
-      "/api/elections/" + this.props.location.state.electionId + "/candidates";
-    console.log(url);
+	addCandidate = async (e) => {
+		e.preventDefault();
 
-    try {
-      const res = await axios.post(url, [newCandidate], config);
-      console.log(res);
-    } catch (error) {
-      const response = error.response;
-      console.log(response.data);
-    }
-  };
+		let formData = new FormData();
+		if (this.state.selectedFile !== null) {
+			formData.append(
+				'image',
+				this.state.selectedFile,
+				this.state.selectedFile.name
+			);
+		}
 
-  onFinish = (e) => {
-    this.addCandidate(e);
-    this.setState({ redirect: true });
-  };
+		formData.append('name', this.state.name);
+		formData.append('promises', this.state.promises);
+		formData.append('gender', this.state.gender);
+		formData.append('age', this.state.age);
+
+		const config = {
+			headers: {
+				'x-auth-token': this.props.location.state.token
+			}
+		};
+
+		const url =
+			'http://localhost:3000/api/elections/' +
+			this.props.location.state.electionId +
+			'/candidates';
+
+		try {
+			this.clearAllFields();
+			const res = await axios.post(url, formData, config);
+		} catch (error) {
+			const response = error.response;
+			console.log(response.data);
+		}
+	};
+
+	onFinish = (e) => {
+		this.addCandidate(e);
+		this.setState({ redirect: true });
+	};
 
   render() {
     if (this.state.redirect === true) {
@@ -148,11 +159,6 @@ export class AddCandidate extends Component {
               <input type="file" className="input100" onChange={this.onFileChange} />
             </div>
 
-			<div className="wrap-input100 validate-input">
-              <label className="label-input100">Upload Voters list : </label>               
-              <input type="file" className="input100" onChange={this.onCSVChange} />
-            </div>
-
             <div className="container-contact100-form-btn">
               <button
                 className="contact100-form-btn"
@@ -176,6 +182,8 @@ export class AddCandidate extends Component {
   }
 }
 
+export default AddCandidate;
+
 const styles = {
   backgroundColor: "#f4f4f4",
   paddingLeft: 400,
@@ -191,5 +199,3 @@ const styles2 = {
   paddingTop: 30,
   width: "100%",
 };
-
-export default AddCandidate;
