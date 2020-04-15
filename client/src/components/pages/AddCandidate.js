@@ -25,6 +25,16 @@ export class AddCandidate extends Component {
 		this.setState({ csv: event.target.files[0] });
 	};
 
+	clearAllFields = () => {
+		this.setState({
+			name: '',
+			promises: '',
+			gender: '',
+			age: '',
+			selectedFile: null
+		});
+	};
+
 	addCandidate = async (e) => {
 		e.preventDefault();
 		console.log(this.props.location.state.token);
@@ -64,6 +74,7 @@ export class AddCandidate extends Component {
 		console.log(url);
 
 		try {
+			this.clearAllFields();
 			const res = await axios.post(url, formData, config);
 			console.log(res);
 		} catch (error) {
