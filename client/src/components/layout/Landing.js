@@ -9,7 +9,7 @@ export class Landing extends Component {
         return (
 			<div className="landing">
 
-				<Navbar app={this.props.app} />
+				{/* <Navbar app={this.props.app} /> */}
 
 
 				<section id="banner">
