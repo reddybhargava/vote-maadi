@@ -245,10 +245,8 @@ export class ElectionResults extends Component {
 						}
 						data={this.state.chart5}
 						options={{
-							chart: {
-								title: 'Votes for Candidates over time',
-								subtitle: this.state.electionName
-							},
+							title: 'Votes for Candidates over time',
+							subtitle: this.state.electionName,
 							hAxis: {
 								title: 'Sentiment',
 								minValue: 0
