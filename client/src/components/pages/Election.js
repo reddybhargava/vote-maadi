@@ -71,15 +71,6 @@ export class Election extends Component {
     }
 }
 
-const img_styles = {
-    objectFit: 'cover',
-    paddingLeft: '20px',
-    paddingRight: '40px',
-    width: '100%',
-    maxHeight: '400px'
-
-}
-
 const heading = {
     paddingTop : '50px',
     marginBottom : '10px',

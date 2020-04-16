@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import Election from './Election';
-import { BrowserRouter as Router, Link} from 'react-router-dom';
+import { Link} from 'react-router-dom';
 
 
 class ViewElection extends Component {

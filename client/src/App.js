@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react';
-import { BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import SignIn from './components/auth/SignIn';
@@ -8,7 +8,6 @@ import AddElection from './components/pages/AddElection';
 import AddCandidate from './components/pages/AddCandidate';
 import OngoingElections from './components/pages/OngoingElections';
 import Election from './components/pages/Election';
-import {v4 as uuid} from 'uuid';
 
 class App extends Component {
 

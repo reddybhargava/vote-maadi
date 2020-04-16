@@ -1,5 +1,5 @@
-import React, { Fragment, useState, Component } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React, { Fragment, Component } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 
 export class AddCandidate extends Component {
