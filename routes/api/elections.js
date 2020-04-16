@@ -9,6 +9,7 @@ const csv = require('csvtojson');
 
 const User = require('../../models/User');
 const Election = require('../../models/Election');
+const Vote = require('../../models/Vote');
 const auth = require('../../middleware/auth');
 const sendMail = require('../../utils/mailer');
 
@@ -260,19 +261,20 @@ router.get('/:electionId/votes', async (req, res) => {
 		const election = await Election.findById(electionId);
 		if (!election) {
 			return res.status(404).send({ msg: 'Election not found' });
-		} else if (election.hostedBy.toString() !== req.user.id) {
-			return res.status(401).send({ msg: 'User not authorized' });
 		}
 
 		const votes = election.candidates.map((candidate) => {
-			const { id, name, votes } = candidate;
+			const { _id: id, name, votes, sentiment } = candidate;
 			return {
 				id,
 				name,
-				votes
+				votes,
+				sentiment
 			};
 		});
-		return res.status(200).send(votes);
+		return res
+			.status(200)
+			.send({ electionName: election.name, votes: votes });
 	} catch (error) {
 		if (error.kind === 'ObjectId') {
 			return res.status(404).send({ msg: 'Election not found' });
@@ -303,14 +305,27 @@ router.post(
 				return res.status(404).send({ msg: 'Election not found' });
 			}
 
-			const { candidateID } = req.body;
+			let candidateName = '';
+			const { candidateId } = req.body;
 			election.candidates = election.candidates.map((candidate) => {
-				if (candidate._id.toString() === candidateID) {
+				if (candidate._id.toString() === candidateId) {
 					candidate.votes += 1;
+					candidateName = candidate.name;
 				}
 				return candidate;
 			});
 
+			const user = await User.findById(req.user.id);
+			const vote = new Vote({
+				electionId: electionId,
+				candidateId: candidateId,
+				candidateName: candidateName,
+				voterId: user.id,
+				voterAge: user.age,
+				voterGender: user.gender
+			});
+
+			await vote.save();
 			await election.save();
 			return res.sendStatus(200);
 		} catch (error) {
@@ -322,6 +337,32 @@ router.post(
 		}
 	}
 );
+
+// @route	GET /api/elections/:electionId/votes/analytics
+// @desc	Get vote details for analytics purpose
+// @access	Public
+router.get('/:electionId/votes/analytics', async (req, res) => {
+	try {
+		const { electionId } = req.params;
+		if (!electionId) {
+			return res.status(400).send({ msg: 'Election ID required' });
+		}
+
+		const election = await Election.findById(electionId);
+		if (!election) {
+			return res.status(404).send({ msg: 'Election not found' });
+		}
+
+		const votes = await Vote.find({ electionId: electionId });
+		return res.send(votes);
+	} catch (error) {
+		if (error.kind === 'ObjectId') {
+			return res.status(404).send({ msg: 'Election not found' });
+		}
+		console.log(error.message);
+		return res.status(500).send({ msg: 'Server Error!' });
+	}
+});
 
 // @route	POST /api/elections/:electionId/voters
 // @desc	Add voters for an election
