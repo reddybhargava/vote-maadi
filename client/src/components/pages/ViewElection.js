@@ -22,18 +22,29 @@ class ViewElection extends Component {
                     }, 
                     }} > 
                 <Fragment>
-                    <img src={this.props.item.imageURL} />
+                    <img src={this.props.item.imageURL} style={img_styles}/>
                     <h2 className='header'>{this.props.item.name}</h2>
                     <br />
                     <p className='description'> {this.props.item.description} </p>
                     <br />
-                    <button className='button'>VOTE!</button>                    
+                    <button className='button' style={btn_style}>VOTE!</button>                    
                 </Fragment>      
 
             </Link>
         </div>
         );
     }
+}
+
+const img_styles = {
+    objectFit: 'cover',
+    maxWidth: '250px',
+    maxHeight: '450px'
+}
+
+const btn_style = {
+    marginTop : '80px',
+    flex : 1,
 }
 
 export default ViewElection;
