@@ -249,8 +249,8 @@ router.post('/:electionId/candidates', [auth], async (req, res) => {
 
 // @route	GET /api/elections/:electionId/votes
 // @desc	Get the number of votes for candidates of an election
-// @access	Private
-router.get('/:electionId/votes', auth, async (req, res) => {
+// @access	Public
+router.get('/:electionId/votes', async (req, res) => {
 	try {
 		const { electionId } = req.params;
 		if (!electionId) {
