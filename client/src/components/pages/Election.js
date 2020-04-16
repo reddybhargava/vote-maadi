@@ -3,7 +3,6 @@ import axios from 'axios'
 import "./view_election.css";
 import { Redirect } from 'react-router-dom';
 import ViewCandidates from './ViewCandidates';
-import "./view_election.css";
 
 
 export class Election extends Component {
@@ -55,13 +54,14 @@ export class Election extends Component {
         );
 
         return (
-            <div>
-                <h1>
-                    Election
+            <div style={styles}>
+                {/* <img src={this.props.location.state.election_image} style={img_styles}/> */}
+                <h1 style={heading}>
+                    {this.props.location.state.election_name}
                 </h1>
 
                 <ul>
-                    <div className="election">
+                    <div className="election" style={{paddingTop : '20px'}}>
                         {items}
                     </div>
                 </ul>
@@ -69,6 +69,19 @@ export class Election extends Component {
             </div>
         )
     }
+}
+
+const heading = {
+    paddingTop : '50px',
+    marginBottom : '10px',
+    fontSize: '50px'
+}
+
+const styles = {
+    backgroundColor: 'white',
+    paddingTop : '0px',
+    paddingLeft : '20px',
+
 }
 
 export default Election;

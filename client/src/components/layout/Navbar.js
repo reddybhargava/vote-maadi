@@ -1,5 +1,6 @@
 import React, {Fragment} from 'react';
 import { Link } from "react-router-dom";
+import '../../templates/css/main.css'
 
 const Navbar = (props) => {
   const items =
@@ -18,17 +19,21 @@ const Navbar = (props) => {
       </li>
     );
   return (
-    <nav className="navbar navbar-dark bg-transparent">
-      <h1>
-        <Link to="/">
-          <i className="fas fa-code"></i> Vote Maadi
-        </Link>
-      </h1>
-      <ul>
-        {items}
-      </ul>
+    <div className="landing">
+    <header id="header" className="alt">
+    <nav className="nav" style={{styles}}>
+    <ul>
+      {items}
+    </ul>
     </nav>
+    </header>
+    </div>
   );
 };
+
+const styles = {
+  paddingTop : '5px',
+  fontColor : 'white'
+}
 
 export default Navbar;

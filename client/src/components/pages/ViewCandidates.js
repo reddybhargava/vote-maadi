@@ -1,7 +1,12 @@
 import React, {Component, Fragment} from 'react';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 class ViewCandidates extends Component {
+
+	state = {
+		redirect : false
+	}
 
     castVote = async (e) => {
 		e.preventDefault();
@@ -24,6 +29,7 @@ class ViewCandidates extends Component {
 			  config
 			);
 			console.log(res);
+			this.setState({redirect : true});
 		  } catch (error) {
 			const response = error.response;
 			console.log(response.data);
@@ -31,24 +37,35 @@ class ViewCandidates extends Component {
 	}
 
     render() {
+
+		if(this.state.redirect === true) {
+			return <Redirect to='/' />;
+		}
+
         return (
 
-        <div className='product'>
+        <div className='product' style={{backgroundColor: '#f4f4f4'}}>
 
                 <Fragment>
-                    <img src={this.props.item.imageURL} />
+                    <img src={this.props.item.imageURL} styles={img_styles}/>
                     <h2 className='header'>{this.props.item.name}</h2>
                     <br />
                     <p className='description'> {this.props.item.promises} </p>
                     <br />
                     <div className='btn'>
-                        <button className='vote' onClick={this.castVote}> VOTE! </button>
+                        <button className='button' onClick={this.castVote}> VOTE! </button>
                     </div>                    
                 </Fragment>  
 
         </div>
         );
     }
+}
+
+const img_styles = {
+    objectFit: 'cover',
+    maxWidth: '250px',
+    maxHeight: '350px'
 }
 
 export default ViewCandidates;
