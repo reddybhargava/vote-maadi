@@ -45,7 +45,9 @@ export class AddCandidate extends Component {
 		formData.append('name', this.state.name);
 		formData.append('promises', this.state.promises);
 		formData.append('gender', this.state.gender);
-		formData.append('age', this.state.age);
+    formData.append('age', this.state.age);
+    
+    console.log(formData);
 
 		const config = {
 			headers: {
@@ -129,7 +131,7 @@ export class AddCandidate extends Component {
                 value="Female"
                 onChange={this.onChange}
               />
-			  <span className="lead"> Female </span>
+			      <span className="lead"> Female </span>
               <span className="focus-input100"></span>
             </div>
 

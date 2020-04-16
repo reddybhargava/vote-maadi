@@ -39,9 +39,6 @@ export class AddElection extends Component {
         this.state.selectedFile.name
       );
     }
-    if (this.state.csv !== null) {
-      formData.append("voterList", this.state.csv, this.state.csv.name);
-    }
 
     formData.append("name", this.state.name);
     formData.append("description", this.state.description);
@@ -50,42 +47,36 @@ export class AddElection extends Component {
     console.log(formData);
 
     try {
-      const res = await axios.post(
-        "/api/elections",
-        formData,
-        config
-      );
+      const res = await axios.post("/api/elections", formData, config);
       console.log(res);
-      console.log(res.data._id);
-      this.setState({ electionId: res.data._id });
+      this.csvUpload(await res.data._id);
     } catch (error) {
       const response = error.response;
       console.log(response.data);
     }
   };
 
-  // File content to be displayed after
-  // file upload is complete
-  fileData = () => {
-    if (this.state.selectedFile) {
-      return (
-        <div>
-          <h2>File Details:</h2>
-          <p>File Name: {this.state.selectedFile.name}</p>
-          <p>File Type: {this.state.selectedFile.type}</p>
-          <p>
-            Last Modified:{" "}
-            {this.state.selectedFile.lastModifiedDate.toDateString()}
-          </p>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <br />
-          <h4>Choose before Pressing the Upload button</h4>
-        </div>
-      );
+  csvUpload = async (id) => {
+    let formData = new FormData();
+    if (this.state.csv !== null) {
+      formData.append("voterList", this.state.csv, this.state.csv.name);
+    }
+
+    const config = {
+      headers: {
+        "x-auth-token": this.props.app.token,
+      },
+    };
+
+    const url = "/api/elections/" + id + "/voters";
+
+    try {
+      const res = await axios.post(url, formData, config);
+      console.log(res);
+      this.setState({ electionId: id });
+    } catch (error) {
+      const response = error.response;
+      console.log(response.data);
     }
   };
 
@@ -171,7 +162,6 @@ export class AddElection extends Component {
               <input
                 className="input100"
                 type="file"
-                className="img"
                 onChange={this.onFileChange}
               />
             </div>
