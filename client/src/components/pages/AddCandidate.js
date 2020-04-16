@@ -1,6 +1,6 @@
-import React, { Fragment, Component } from "react";
-import { Redirect } from "react-router-dom";
-import axios from "axios";
+import React, { Fragment, Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 export class AddCandidate extends Component {
 	state = {
@@ -18,7 +18,6 @@ export class AddCandidate extends Component {
 		// Update the state
 		this.setState({ selectedFile: event.target.files[0] });
 	};
-
 
 	clearAllFields = () => {
 		this.setState({
@@ -45,9 +44,9 @@ export class AddCandidate extends Component {
 		formData.append('name', this.state.name);
 		formData.append('promises', this.state.promises);
 		formData.append('gender', this.state.gender);
-    formData.append('age', this.state.age);
-    
-    console.log(formData);
+		formData.append('age', this.state.age);
+
+		console.log(formData);
 
 		const config = {
 			headers: {
@@ -62,7 +61,7 @@ export class AddCandidate extends Component {
 
 		try {
 			this.clearAllFields();
-			const res = await axios.post(url, formData, config);
+			await axios.post(url, formData, config);
 		} catch (error) {
 			const response = error.response;
 			console.log(response.data);
@@ -74,81 +73,84 @@ export class AddCandidate extends Component {
 		this.setState({ redirect: true });
 	};
 
-  render() {
-    if (this.state.redirect === true) {
-      return <Redirect to="/" />;
-    }
-    return (
-      <Fragment>
-        <div className="container-contact100" style={styles}>
-          <div className="wrap-contact100" style={styles2}>
-            <span className="contact100-form-title" style={{ paddingTop: 20 }}>
-              Candidate Details
-            </span>
+	render() {
+		if (this.state.redirect === true) {
+			return <Redirect to="/" />;
+		}
+		return (
+			<Fragment>
+				<div className="container-contact100" style={styles}>
+					<div className="wrap-contact100" style={styles2}>
+						<span
+							className="contact100-form-title"
+							style={{ paddingTop: 20 }}
+						>
+							Candidate Details
+						</span>
 
-            <div className="wrap-input100 validate-input">
-              <label className="label-input100">Name</label>
-              <input
-                id="name"
-                className="input100"
-                type="text"
-                placeholder="Enter the election name..."
-                name="name"
-                value={this.state.name}
-                onChange={this.onChange}
-                required
-              />
-              <span className="focus-input100"></span>
-            </div>
+						<div className="wrap-input100 validate-input">
+							<label className="label-input100">Name</label>
+							<input
+								id="name"
+								className="input100"
+								type="text"
+								placeholder="Enter the election name..."
+								name="name"
+								value={this.state.name}
+								onChange={this.onChange}
+								required
+							/>
+							<span className="focus-input100"></span>
+						</div>
 
-            <div className="wrap-input100 validate-input">
-              <label className="label-input100">Age</label>
-              <input
-                type="number"
-                placeholder="Age"
-                className="input100"
-                name="age"
-                value={this.state.age}
-                onChange={this.onChange}
-                required
-              />
-              <span className="focus-input100"></span>
-            </div>
+						<div className="wrap-input100 validate-input">
+							<label className="label-input100">Age</label>
+							<input
+								type="number"
+								placeholder="Age"
+								className="input100"
+								name="age"
+								value={this.state.age}
+								onChange={this.onChange}
+								required
+							/>
+							<span className="focus-input100"></span>
+						</div>
 
-            <div className="wrap-input100 validate-input">
-              <label className="label-input100">Gender </label>
-              <input
-                type="radio"
-                name="gender"
-                value="Male"
-                onChange={this.onChange}
-              />
-              <span className="lead"> Male </span>
-              <br />
-              <input
-                type="radio"
-                name="gender"
-                value="Female"
-                onChange={this.onChange}
-              />
-			      <span className="lead"> Female </span>
-              <span className="focus-input100"></span>
-            </div>
+						<div className="wrap-input100 validate-input">
+							<label className="label-input100">Gender </label>
+							<input
+								type="radio"
+								name="gender"
+								value="Male"
+								onChange={this.onChange}
+							/>
+							<span className="lead"> Male </span>
+							<br />
+							<input
+								type="radio"
+								name="gender"
+								value="Female"
+								onChange={this.onChange}
+							/>
+							<span className="lead"> Female </span>
+							<span className="focus-input100"></span>
+						</div>
 
-            <div className="wrap-input100 validate-input">
-              <label className="label-input100">Manifesto </label>
-              <input
-                type="text"
-                placeholder="promises"
-                className="input100"
-                name="promises"
-                value={this.state.promises}
-                onChange={this.onChange}
-                required
-              />
-              <span className="focus-input100"></span>
-            </div>
-            {/* 
+						<div className="wrap-input100 validate-input">
+							<label className="label-input100">Manifesto </label>
+							<input
+								type="text"
+								placeholder="promises"
+								className="input100"
+								name="promises"
+								value={this.state.promises}
+								onChange={this.onChange}
+								required
+							/>
+							<span className="focus-input100"></span>
+						</div>
+						{/* 
 					<div className="form-group">
 						<input 
 							type="reset" 
@@ -156,48 +158,57 @@ export class AddCandidate extends Component {
 						/>
 					</div>					 */}
 
-			<div className="wrap-input100 validate-input">
-              <label className="label-input100">Upload Candidate image : </label>              
-              <input type="file" className="input100" onChange={this.onFileChange} />
-            </div>
+						<div className="wrap-input100 validate-input">
+							<label className="label-input100">
+								Upload Candidate image :{' '}
+							</label>
+							<input
+								type="file"
+								className="input100"
+								onChange={this.onFileChange}
+							/>
+						</div>
 
-            <div className="container-contact100-form-btn">
-              <button
-                className="contact100-form-btn"
-                onClick={this.addCandidate}
-              >
-                Add Candidate
-              </button>
-            </div>
+						<div className="container-contact100-form-btn">
+							<button
+								className="contact100-form-btn"
+								onClick={this.addCandidate}
+							>
+								Add Candidate
+							</button>
+						</div>
 
-            <br />
+						<br />
 
-            <div className="container-contact100-form-btn">
-              <button className="contact100-form-btn" onClick={this.onFinish}>
-                Save and Finish
-              </button>
-            </div>
-          </div>
-        </div>
-      </Fragment>
-    );
-  }
+						<div className="container-contact100-form-btn">
+							<button
+								className="contact100-form-btn"
+								onClick={this.onFinish}
+							>
+								Save and Finish
+							</button>
+						</div>
+					</div>
+				</div>
+			</Fragment>
+		);
+	}
 }
 
 export default AddCandidate;
 
 const styles = {
-  backgroundColor: "#f4f4f4",
-  paddingLeft: 400,
-  paddingRight: 400,
-  width: "100%",
+	backgroundColor: '#f4f4f4',
+	paddingLeft: 400,
+	paddingRight: 400,
+	width: '100%'
 };
 
 const styles2 = {
-  backgroundColor: "white",
-  paddingLeft: 20,
-  paddingRight: 20,
-  paddingBottom: 20,
-  paddingTop: 30,
-  width: "100%",
+	backgroundColor: 'white',
+	paddingLeft: 20,
+	paddingRight: 20,
+	paddingBottom: 20,
+	paddingTop: 30,
+	width: '100%'
 };
