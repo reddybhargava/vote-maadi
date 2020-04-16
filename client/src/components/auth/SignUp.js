@@ -8,7 +8,7 @@ export class SignUp extends Component {
     name: "",
     email: "",
     password: "",
-    type: "",
+    type: "Admin",
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -99,7 +99,7 @@ export class SignUp extends Component {
                 <span className="focus-input100"></span>
               </div>
 
-              <div className="wrap-input100 validate-input">
+              {/* <div className="wrap-input100 validate-input">
                 <label className="label-input100">Type</label>
                 <input
                   type="radio"
@@ -119,7 +119,7 @@ export class SignUp extends Component {
                 />
                 <span className="lead"> Voter </span>
                 <span className="focus-input100"></span>
-              </div>
+              </div> */}
 
               <div className="container-contact100-form-btn">
                 <button className="contact100-form-btn" onClick={this.onSubmit}>
