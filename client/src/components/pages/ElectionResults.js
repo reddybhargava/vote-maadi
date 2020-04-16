@@ -5,8 +5,8 @@ import ReactLoading from 'react-loading';
 
 export class ElectionResults extends Component {
 	state = {
-		electionID: '5e9338c2d9f9f5278485a869',
-		electionName: '',
+		electionID: this.props.location.state.electionId,
+		electionName: this.props.location.state.electionName,
 		candidates: {},
 		candidateSentiments: {},
 		chartReady: false,
@@ -136,6 +136,10 @@ export class ElectionResults extends Component {
 	}
 
 	render() {
+		// if(this.state.electionID === '')
+		// {
+		// 	this.setState({electionID : this.props.location.state.electionId})
+		// }
 		return (
 			<div>
 				<div className={'my-pretty-chart-container'}>
