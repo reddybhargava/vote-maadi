@@ -12,11 +12,19 @@ const Navbar = (props) => {
         <li>
           <Link to="/accounts/signin">Sign In</Link>
         </li>
+        <li>
+        <Link to="/view/completed">Results</Link>
+        </li>
       </Fragment>
     ) : (
+      <Fragment>
       <li>
         <Link to="/admin/elections">Host Election</Link>
       </li>
+      <li>
+        <Link to="/view/completed">Results</Link>
+      </li>
+      </Fragment>
     );
   return (
     <div className="landing">

@@ -9,6 +9,7 @@ import AddCandidate from './components/pages/AddCandidate';
 import OngoingElections from './components/pages/OngoingElections';
 import Election from './components/pages/Election';
 import ElectionResults from './components/pages/ElectionResults';
+import CompletedElections from './components/pages/CompletedElections';
 import { v4 as uuid } from 'uuid';
 
 class App extends Component {
@@ -47,8 +48,10 @@ class App extends Component {
 							/>
 							<Route
 								exact
-								path="/view/ongoing/election"
-								component={Election}
+								path="/view/completed"
+								component={() => (
+									<CompletedElections app={this.state} />
+								)}
 							/>
 							<Route
 								exact
