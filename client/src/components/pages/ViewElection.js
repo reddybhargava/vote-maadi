@@ -18,7 +18,8 @@ class ViewElection extends Component {
             <Link to={
                     { pathname: "/view/ongoing/election", 
                       state: { electionId: this.props.item._id,
-                               token: this.props.token
+                               token: this.props.token,
+                               election_name: this.props.item.name,
                     }, 
                     }} > 
                 <Fragment>
@@ -44,7 +45,6 @@ const img_styles = {
 
 const btn_style = {
     marginTop : '80px',
-    flex : 1,
 }
 
 export default ViewElection;
