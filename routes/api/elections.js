@@ -306,7 +306,7 @@ router.post(
 			}
 
 			let candidateName = '';
-			const { candidateId } = req.body;
+			const { candidateID: candidateId } = req.body;
 			election.candidates = election.candidates.map((candidate) => {
 				if (candidate._id.toString() === candidateId) {
 					candidate.votes += 1;
