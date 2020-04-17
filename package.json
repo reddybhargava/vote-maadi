@@ -8,7 +8,9 @@
 		"server": "nodemon server",
 		"client": "npm start --prefix client",
 		"dev": "concurrently \"npm run server\" \"npm run client\"",
-		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+		"client-install": "cd client && npm install",
+		"client-build": "cd client && npm run build",
+		"heroku-postbuild": "npm run client-install && npm run client-build"
 	},
 	"license": "MIT",
 	"dependencies": {
@@ -18,6 +20,7 @@
 		"config": "^3.3.0",
 		"convert-csv-to-json": "0.0.15",
 		"express": "^4.17.1",
+		"express-fileupload": "^1.1.7-alpha.3",
 		"express-joi-validation": "^4.0.3",
 		"jsonwebtoken": "^8.5.1",
 		"mongoose": "^5.9.5",
