@@ -23,7 +23,7 @@ export class OngoingElections extends Component {
         }
            
         const items = this.state.elections.map((item, key) =>
-            <ViewElection item={item} key={item._id} token={this.props.app.token} />
+            <ViewElection item={item} key={item._id} token={this.props.app.token} eligibleFor={this.props.app.validElections} />
         );
 
         return (
