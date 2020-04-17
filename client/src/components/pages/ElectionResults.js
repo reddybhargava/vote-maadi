@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Chart } from 'react-google-charts';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
@@ -141,8 +141,13 @@ export class ElectionResults extends Component {
 		// 	this.setState({electionID : this.props.location.state.electionId})
 		// }
 		return (
-			<div>
-				<div className={'my-pretty-chart-container'}>
+			<Fragment>			
+		<h1 style={heading}>
+			{this.state.electionName}
+		</h1>
+		<div style={{backgroundColor: '#f4f4f4', marginRight : '20px'}}>
+			<div style={row}>
+				<div className={'my-pretty-chart-container'} style={{marginRight : '100px'}}>
 					<Chart
 						width="500px"
 						height="300px"
@@ -190,7 +195,10 @@ export class ElectionResults extends Component {
 						}}
 					/>
 				</div>
-				<div className={'my-pretty-chart-container'}>
+			</div>
+
+			<div style={row}>
+				<div className={'my-pretty-chart-container'} style={{ marginLeft: '300px'}}>
 					<Chart
 						width="500px"
 						height="300px"
@@ -212,7 +220,40 @@ export class ElectionResults extends Component {
 						}}
 					/>
 				</div>
-				<div className={'my-pretty-chart-container'}>
+				
+			</div>
+			<div className="my-pretty-chart-container" style={{ marginLeft: '200px', marginBottom : '80px'}}>
+					<Chart
+						width="800px"
+						height="300px"
+						chartType="BarChart"
+						loader={
+							<ReactLoading
+								type="spinningBubbles"
+								color="black"
+								height={'20%'}
+								width={'20%'}
+							/>
+						}
+						data={this.state.chart5}
+						options={{
+							title: 'Sentiment Analysis',
+							subtitle: this.state.electionName,
+							hAxis: {
+								title: 'Sentiment',
+								minValue: 0
+							},
+							vAxis: {
+								title: 'Candidates'
+							},
+							legend: {
+								position: 'none'
+							}
+						}}
+					/>
+			</div>
+
+			<div className={'my-pretty-chart-container'} style={{ marginLeft: '80px'}}>
 					<Chart
 						width="1000px"
 						height="500px"
@@ -233,40 +274,26 @@ export class ElectionResults extends Component {
 							}
 						}}
 					/>
-				</div>
-				<div className="my-pretty-chart-container">
-					<Chart
-						width="800px"
-						height="300px"
-						chartType="BarChart"
-						loader={
-							<ReactLoading
-								type="spinningBubbles"
-								color="black"
-								height={'20%'}
-								width={'20%'}
-							/>
-						}
-						data={this.state.chart5}
-						options={{
-							title: 'Votes for Candidates over time',
-							subtitle: this.state.electionName,
-							hAxis: {
-								title: 'Sentiment',
-								minValue: 0
-							},
-							vAxis: {
-								title: 'Candidates'
-							},
-							legend: {
-								position: 'none'
-							}
-						}}
-					/>
-				</div>
 			</div>
+			</div>	
+			</Fragment>
 		);
 	}
+}
+
+const heading = {
+	marginTop : '50px',
+    marginBottom : '50px',
+    fontSize: '50px'
+}
+
+const row = {
+	display: 'flex',
+	marginBottom : '80px',
+	paddingLeft : '30px',
+	paddingTop : '20px',
+
+	// backgroundColor: '#f4f4f4'
 }
 
 export default ElectionResults;
