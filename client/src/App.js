@@ -16,7 +16,7 @@ class App extends Component {
 	state = {
 		loggedIn: false,
 		name: '',
-		// type: '',
+		type: '',
 		token: ''
 	};
 
@@ -30,7 +30,9 @@ class App extends Component {
 	setToken = (token) => {
 		this.setState({ token: token });
 	};
-
+	setType = (type) => {
+		this.setState({ type: type });
+	};
 	render() {
 		return (
 			<Router>
@@ -78,6 +80,7 @@ class App extends Component {
 										logIn={this.logIn}
 										setName={this.setName}
 										setToken={this.setToken}
+										setType={this.setType}
 										app={this.state}
 									/>
 								)}
