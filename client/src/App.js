@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'; 
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import SignIn from './components/auth/SignIn';
@@ -10,13 +10,13 @@ import OngoingElections from './components/pages/OngoingElections';
 import Election from './components/pages/Election';
 import ElectionResults from './components/pages/ElectionResults';
 import CompletedElections from './components/pages/CompletedElections';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 
 class App extends Component {
 	state = {
 		loggedIn: false,
 		name: '',
-		// type: '',
+		type: '',
 		token: ''
 	};
 
@@ -30,7 +30,9 @@ class App extends Component {
 	setToken = (token) => {
 		this.setState({ token: token });
 	};
-
+	setType = (type) => {
+		this.setState({ type: type });
+	};
 	render() {
 		return (
 			<Router>
@@ -78,6 +80,7 @@ class App extends Component {
 										logIn={this.logIn}
 										setName={this.setName}
 										setToken={this.setToken}
+										setType={this.setType}
 										app={this.state}
 									/>
 								)}
@@ -116,6 +119,6 @@ const styles = {
 	marginLeft: 0,
 	marginRight: 0,
 	width: '100%'
-}
+};
 
 export default App;
