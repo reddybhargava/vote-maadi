@@ -48,6 +48,11 @@ class App extends Component {
 							/>
 							<Route
 								exact
+								path="/view/ongoing/election"
+								component={Election}
+							/>
+							<Route
+								exact
 								path="/view/completed"
 								component={() => (
 									<CompletedElections app={this.state} />
