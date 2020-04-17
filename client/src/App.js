@@ -10,14 +10,14 @@ import OngoingElections from './components/pages/OngoingElections';
 import Election from './components/pages/Election';
 import ElectionResults from './components/pages/ElectionResults';
 import CompletedElections from './components/pages/CompletedElections';
-// import { v4 as uuid } from 'uuid';
 
 class App extends Component {
 	state = {
 		loggedIn: false,
 		name: '',
 		type: '',
-		token: ''
+		token: '',
+		validElections : []
 	};
 
 	logIn = () => {
@@ -33,6 +33,11 @@ class App extends Component {
 	setType = (type) => {
 		this.setState({ type: type });
 	};
+
+	setElection = (election) => {
+		this.setState({ validElections : election });
+	};
+
 	render() {
 		return (
 			<Router>
@@ -81,6 +86,7 @@ class App extends Component {
 										setName={this.setName}
 										setToken={this.setToken}
 										setType={this.setType}
+										setElection={this.setElection}
 										app={this.state}
 									/>
 								)}
@@ -112,10 +118,6 @@ class App extends Component {
 
 const styles = {
 	marginTop: 0,
-	// paddingTop: 0,
-	// paddingBottom: 0,
-	// paddingLeft: 0,
-	// paddingRight: 0,
 	marginLeft: 0,
 	marginRight: 0,
 	width: '100%'

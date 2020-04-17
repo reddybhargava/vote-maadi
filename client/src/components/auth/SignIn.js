@@ -45,6 +45,7 @@ class SignIn extends Component {
 			this.props.setName(email);
 			this.props.setToken(res.data.token);
 			this.props.setType(res2.data.type);
+			this.props.setElection(res2.data.elections);
 		} catch (error) {
 			console.log(error);
 			// alert(error.response.data.errors);
