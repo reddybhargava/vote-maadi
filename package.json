@@ -10,7 +10,7 @@
 		"dev": "concurrently \"npm run server\" \"npm run client\"",
 		"client-install": "cd client && npm install",
 		"client-build": "cd client && npm run build",
-		"heroku-postbuild": "npm run client-install && npm run client-build && NODE_ENV=production"
+		"heroku-postbuild": "npm install && npm run client-install && npm run client-build && NODE_ENV=production"
 	},
 	"license": "MIT",
 	"dependencies": {
