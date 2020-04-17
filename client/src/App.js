@@ -7,7 +7,7 @@ import SignUp from './components/auth/SignUp';
 import AddElection from './components/pages/AddElection';
 import AddCandidate from './components/pages/AddCandidate';
 import OngoingElections from './components/pages/OngoingElections';
-// import Election from './components/pages/Election';
+import Election from './components/pages/Election';
 import ElectionResults from './components/pages/ElectionResults';
 import CompletedElections from './components/pages/CompletedElections';
 // import { v4 as uuid } from 'uuid';
@@ -107,15 +107,15 @@ class App extends Component {
 	}
 }
 
-// const styles = {
-// 	marginTop: 0,
-// 	// paddingTop: 0,
-// 	// paddingBottom: 0,
-// 	// paddingLeft: 0,
-// 	// paddingRight: 0,
-// 	marginLeft: 0,
-// 	marginRight: 0,
-// 	width: '100%'
-// }
+const styles = {
+	marginTop: 0,
+	// paddingTop: 0,
+	// paddingBottom: 0,
+	// paddingLeft: 0,
+	// paddingRight: 0,
+	marginLeft: 0,
+	marginRight: 0,
+	width: '100%'
+};
 
 export default App;
