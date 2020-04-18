@@ -1,0 +1,97 @@
+@import url(https://fonts.googleapis.com/css?family=Nunito:400,300,700);
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
+.election {
+  padding: 10px;
+  padding-top: 100px;
+  text-align: center;
+}
+.election .product {
+  position: relative;
+  overflow: hidden;
+  width: 320px;
+  height: 500px;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.45);
+  margin: 15px;
+  padding: 15px;
+}
+.election .product img {
+  position: center;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+  -webkit-clip-path: polygon(0 100%, 0 0, 100% 0, 100% 90%);
+          clip-path: polygon(0 100%, 0 0, 100% 0, 100% 90%);
+  border-top-right-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.election .product img:hover {
+  -webkit-clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%);
+          clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%);
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+.election .product h2 {
+  text-align: left;
+  columns: #f4f4f4;;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.election .product .description {
+  text-align: left;
+  font-size: 12px;
+  color:black;
+  max-height: 23px;
+  /* overflow: hidden; */
+}
+
+/* 
+.election .product .btn {
+  position: absolute;
+  font-size: 11px;
+  font-weight: bold;
+  float: right;
+  padding: 10px;
+  border: 2px solid red;
+  border-radius: 20px;
+  bottom: 10px;
+  right: 10px;
+  color: red;
+  cursor: pointer;
+  overflow: hidden;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+}
+.election .product .btn.ok {
+  background-color: rgba(0, 254, 254, 0.4);
+  color: #fff;
+}
+.election .product .btn.ok:after {
+  content: "\e080";
+  color: #fff;
+}
+.election .product .btn:hover {
+  padding-right: 25px;
+}
+.election .product .btn:hover:after {
+  margin-left: 5px;
+}
+.election .product .btn:after {
+  font-family: 'simple-line-icons';
+  content: "\e095";
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+  position: absolute;
+  color: red;
+  margin-left: 30px;
+  transition: all .2s ease;
+} */
