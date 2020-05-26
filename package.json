@@ -10,12 +10,15 @@
 		"dev": "concurrently \"npm run server\" \"npm run client\"",
 		"client-install": "cd client && npm install",
 		"client-build": "cd client && npm run build",
-		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+		"test": "jest --env=node --verbose"
 	},
 	"license": "MIT",
 	"dependencies": {
 		"@hapi/joi": "^17.1.1",
+		"axios": "^0.19.2",
 		"bcryptjs": "^2.4.3",
+		"chai": "^4.2.0",
 		"cloudinary": "^1.21.0",
 		"config": "^3.3.0",
 		"convert-csv-to-json": "0.0.15",
@@ -23,12 +26,12 @@
 		"express": "^4.17.1",
 		"express-fileupload": "^1.1.7-alpha.3",
 		"express-joi-validation": "^4.0.3",
+		"jest": "^25.5.4",
 		"jsonwebtoken": "^8.5.1",
 		"mongoose": "^5.9.5",
 		"nodemailer": "^6.4.6",
 		"request": "^2.88.2",
-		"sentiment": "^5.0.2",
-		"simple-spam-filter": "0.0.2"
+		"sentiment": "^5.0.2"
 	},
 	"devDependencies": {
 		"concurrently": "^5.1.0",
