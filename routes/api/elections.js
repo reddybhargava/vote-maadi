@@ -37,7 +37,7 @@ router.post('/', [auth, validator.body(bodySchema)], async (req, res) => {
 			hostedBy
 		});
 
-		if (req.files !== null) {
+		if (req.files !== null && req.files !== undefined) {
 			const image = req.files.image;
 			const imageURL = `elections/${election.id}`;
 			cloudinary.uploader
@@ -214,7 +214,7 @@ router.post('/:electionId/candidates', [auth], async (req, res) => {
 			sentiment
 		};
 
-		if (req.files !== null) {
+		if (req.files !== null && req.files !== undefined) {
 			const image = req.files.image;
 			const imageFolder = 'candidates';
 			cloudinary.uploader
