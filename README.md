@@ -1,6 +1,5 @@
 # Vote Maadi
 
-## Description about the project here...
 This is a web application used to deploy elections online, aimed at hosting small scale elections. It is a secure platform with a easy to use interface. The application also analyses election/candidate data to provide insights about voting trends, and also sentiment analyze candidate's manifesto.
 
 ## Technologies 
