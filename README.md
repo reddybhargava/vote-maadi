@@ -1,6 +1,10 @@
 # Vote Maadi
 
 ## Description about the project here...
+This is a web application used to deploy elections online, aimed at hosting small scale elections. It is a secure platform with a easy to use interface. The application also analyses election/candidate data to provide insights about voting trends, and also sentiment analyze candidate's manifesto.
+
+## Technologies 
+MERN Stack
 
 ## Files
 
@@ -28,20 +32,24 @@
 
 ### Frontend
 
--   ~~Landing Page~~ | (Bhargava)
--   ~~Sign Up and Sign In Pages~~ | (Bhargava)
+-   Landing Page 
+-   Sign Up and Sign In Pages 
 -   Admin Page for managing elections
     -   creating, deleting elections
     -   adding voter list and candidate details
+-   Viewing Elections
 -   Candidate Info Page for voters to view
 -   Voting Page
 -   Results Page
 
 ### Backend
 
--   ~~User Authentication~~ | (Bhargava)
--   ~~User Sign In and Sign Up~~ | (Bhargava)
-    -   email voters the link/pwd is left
--   ~~Create, List and Delete Elections~~ | (Bhargava)
+-   User Authentication 
+-   User Sign In and Sign Up 
+    -   email voters the link/pwd 
+-   Create, List and Delete Elections
 -   Add Candidate Details, Voter List
--   Update Votes, Get Votes for an election and the Data Analytics part
+-   Update Votes, Get Votes for an election and 
+-   Data Analytics
+    -   Election, Voting Trends
+    -   Sentiment Analysis
